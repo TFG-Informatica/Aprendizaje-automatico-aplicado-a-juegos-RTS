@@ -39,7 +39,7 @@ public class BaseBehavior {
         rangedType = utt.getUnitType("Ranged");
     }   
 	
-	public void oneWorkerBeh(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+	public void oneWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nworkers = 0;
         for (Unit u2 : pgs.getUnits()) {
             if (u2.getType() == workerType
@@ -52,7 +52,7 @@ public class BaseBehavior {
         }
 	}
 	
-	public void twoWorkerBeh(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+	public void twoWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nworkers = 0;
         for (Unit u2 : pgs.getUnits()) {
             if (u2.getType() == workerType
@@ -65,7 +65,7 @@ public class BaseBehavior {
         }
 	}
 	
-	public void threeWorkerBeh(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+	public void threeWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nworkers = 0;
         for (Unit u2 : pgs.getUnits()) {
             if (u2.getType() == workerType
@@ -78,7 +78,7 @@ public class BaseBehavior {
         }
 	}
 	
-	public AbstractAction rushWorkerBeh(Unit u, Player p, PhysicalGameState pgs) {
+	public AbstractAction rushWorker(Unit u, Player p, PhysicalGameState pgs) {
         if (p.getResources() >= workerType.cost) {
             return new Train(u, workerType);
         }

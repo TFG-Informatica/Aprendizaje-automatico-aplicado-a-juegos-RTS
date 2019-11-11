@@ -112,7 +112,7 @@ public class WorkerBehavior {
 		
 	}
 	
-	public void aggressiveWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+	public void aggressiveWorkerBeh(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nbases = 0;
 		int resourcesUsed = 0;
 
