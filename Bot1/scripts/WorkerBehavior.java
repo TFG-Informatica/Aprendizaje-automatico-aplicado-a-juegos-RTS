@@ -112,19 +112,14 @@ public class WorkerBehavior {
 		
 	}
 	
-	public void aggresiveWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+	public void aggressiveWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nbases = 0;
-        int nbarracks = 0;
-        int resourcesUsed = 0;
+		int resourcesUsed = 0;
 
         for (Unit u2 : pgs.getUnits()) {
             if (u2.getType() == baseType
                     && u2.getPlayer() == p.getID()) {
                 nbases++;
-            }
-            if (u2.getType() == barracksType
-                    && u2.getPlayer() == p.getID()) {
-                nbarracks++;
             }
         }
 
@@ -133,13 +128,9 @@ public class WorkerBehavior {
             // build a base:
             gs.buildIfNotAlreadyBuilding(u,baseType,u.getX(),u.getY(),reservedPositions,p,pgs);
             resourcesUsed += baseType.cost;
-        } else if (nbarracks == 0 && buildingBarracks == 0 &&
-        	p.getResources() >= barracksType.cost + resourcesUsed) {
-            // build a barracks:
-            gs.buildIfNotAlreadyBuilding(u,barracksType,u.getX(),u.getY(),reservedPositions,p,pgs);
-            resourcesUsed += barracksType.cost;
-        } else {
-            Unit closestBase = null;
+        } else if (nbases == 0 && buildingBarracks == 0) {
+            // harvest resources for building a base:
+        	Unit closestBase = null;
             Unit closestResource = null;
             int closestDistance = 0;
             for (Unit u2 : pgs.getUnits()) {
@@ -170,6 +161,22 @@ public class WorkerBehavior {
                 } else {
                     gs.harvest(u, closestResource, closestBase);
                 }
+            }
+        } else {
+            Unit closestEnemy = null;
+            int closestDistance = 0;
+            for (Unit u2 : pgs.getUnits()) {
+                if (u2.getPlayer() >= 0 && u2.getPlayer() != p.getID()) {
+                    int d = Math.abs(u2.getX() - u.getX()) + Math.abs(u2.getY() - u.getY());
+                    if (closestEnemy == null || d < closestDistance) {
+                        closestEnemy = u2;
+                        closestDistance = d;
+                    }
+                }
+            }
+            if (closestEnemy != null) {
+//                System.out.println("LightRushAI.meleeUnitBehavior: " + u + " attacks " + closestEnemy);
+                gs.attack(u, closestEnemy);
             }
         }
 		
