@@ -175,7 +175,6 @@ public class WorkerBehavior {
                 }
             }
             if (closestEnemy != null) {
-//                System.out.println("LightRushAI.meleeUnitBehavior: " + u + " attacks " + closestEnemy);
                 gs.attack(u, closestEnemy);
             }
         }
