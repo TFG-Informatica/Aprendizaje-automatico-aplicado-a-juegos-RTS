@@ -11,7 +11,7 @@ import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
 
-enum WorkBehType{HARVESTER, };
+enum WorkBehType{HARVESTER, AGGRESIVE};
 
 public class WorkerBehavior {
 	
