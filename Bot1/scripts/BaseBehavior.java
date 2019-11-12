@@ -72,5 +72,23 @@ public class BaseBehavior extends UnitBehavior{
 	public void setType(BaseBehType a_baseBehType) {
 		baseBehType = a_baseBehType;
 	}
+
+	@Override
+	public void behavior(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+		switch (baseBehType) {
+		case ONEWORKER:
+			this.oneWorker(gs, u, p, pgs);
+			break;
+		case TWOWORKER:
+			this.twoWorker(gs, u, p, pgs);
+			break;
+		case THREEWORKER:
+			this.threeWorker(gs, u, p, pgs);
+			break;
+		case RUSHWORKER:
+			this.rushWorker(u, p, pgs);
+			break;
+		}
+	}
 	
 }

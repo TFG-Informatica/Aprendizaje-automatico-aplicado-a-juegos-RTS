@@ -90,4 +90,26 @@ public class BarrackBehavior extends UnitBehavior{
 	public void setType(BarBehType a_barBehType) {
 		barBehType = a_barBehType;
 	}
+
+	@Override
+	public void behavior(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+		switch(barBehType) {
+		case HEAVY:
+			trainHeavy(gs, u, p, pgs);
+			break;
+		case LESS:
+			trainLess(gs, u, p, pgs);
+			break;
+		case LIGHT:
+			trainLight(gs, u, p, pgs);
+			break;
+		case RANGED:
+			trainRanged(gs, u, p, pgs);
+			break;
+		default:
+			break;
+		
+		}
+		
+	}
 }
