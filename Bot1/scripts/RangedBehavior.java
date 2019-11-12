@@ -1,41 +1,26 @@
 package scripts;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import rts.PhysicalGameState;
 import rts.Player;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
+import util.Pair;
 
 enum RangedBehType{LESSHP,LESSPERCHP,CLOSEST}
 
-public class RangedBehavior {
+public class RangedBehavior extends UnitBehavior{
 	
 	private RangedBehType rangedBehType;
-	
-	private UnitTypeTable utt;
-	private UnitType workerType;
-	private UnitType baseType;
-	private UnitType barracksType;
-	private UnitType lightType;
-	private UnitType heavyType;
-	private UnitType rangedType;
-	
-	
+
 	public RangedBehavior(UnitTypeTable a_utt, RangedBehType a_rangedBehType) {
-		reset(utt);
+		super(a_utt);
 		rangedBehType = a_rangedBehType;
 	}
-	
-	public void reset(UnitTypeTable a_utt)  
-    {
-        utt = a_utt;
-        workerType = utt.getUnitType("Worker");
-        baseType = utt.getUnitType("Base");
-        barracksType = utt.getUnitType("Barracks");
-        lightType = utt.getUnitType("Light");
-        heavyType = utt.getUnitType("Heavy");
-        rangedType = utt.getUnitType("Ranged");
-    }   
 	
 	public void lessHPAttack(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		Unit lowestHPEnemy = null;
@@ -49,8 +34,8 @@ public class RangedBehavior {
                 }
             }
         }
-        if (lowestHPEnemy != null && rangedType.attackRange) {
-            gs.attack(u, lowestHPEnemy);
+        if (lowestHPEnemy != null) {
+        	kite(gs, u, lowestHPEnemy, pgs);
         }
 	}
 	
@@ -67,7 +52,7 @@ public class RangedBehavior {
             }
         }
         if (lowestHPEnemy != null) {
-            gs.attack(u, lowestHPEnemy);
+            kite(gs, u, lowestHPEnemy, pgs);
         }
 	}
 	
@@ -84,10 +69,51 @@ public class RangedBehavior {
             }
         }
         if (closestEnemy != null) {
-            gs.attack(u, closestEnemy);
+        	kite(gs, u, closestEnemy, pgs);
         }
 	}
 	
+	public void kite(GeneralScript gs, Unit u, Unit u2, PhysicalGameState pgs) {
+		if (Math.abs(u2.getX() - u.getX())
+				+ Math.abs(u2.getY() - u.getY()) < rangedType.attackRange) {
+			List<Pair<Integer, Integer>> pos = new ArrayList<Pair<Integer, Integer>>();
+			int difX = u.getX() - u2.getX();
+			int difY = u.getY() - u2.getY();
+			if (difX == 0) {
+				pos.add(new Pair<Integer, Integer>(1, 0));
+				pos.add(new Pair<Integer, Integer>(-1, 0));
+			} else if (difX > 0) {
+				pos.add(new Pair<Integer, Integer>(1, 0));
+			} else {
+				pos.add(new Pair<Integer, Integer>(-1, 0));
+			}
+			if (difY == 0) {
+				pos.add(new Pair<Integer, Integer>(0, 1));
+				pos.add(new Pair<Integer, Integer>(0, -1));
+			} else if (difY > 0) {
+				pos.add(new Pair<Integer, Integer>(0, 1));
+			} else {
+				pos.add(new Pair<Integer, Integer>(0, -1));
+			}
+
+			int r = new Random().nextInt(pos.size());
+			Pair<Integer, Integer> newPos = null;
+			int N = pos.size() + r;
+			boolean[][] free = pgs.getAllFree();
+			while (r < N && newPos == null) {
+				Pair<Integer, Integer> nPos = new Pair<Integer, Integer>(u.getX() + pos.get(r % pos.size()).m_a,
+						u.getY() + pos.get(r % pos.size()).m_b);
+				if (nPos.m_a >= 0 && nPos.m_b >= 0 && nPos.m_a < pgs.getWidth() && nPos.m_b < pgs.getHeight()
+						&& free[nPos.m_a][nPos.m_b])
+					newPos = nPos;
+			}
+			if (newPos != null)
+				gs.move(u, newPos.m_a, newPos.m_b);
+			else
+				gs.attack(u, u2);
+		} else
+			gs.attack(u, u2);
+	}
 	
 	public RangedBehType getType() {
 		return rangedBehType;

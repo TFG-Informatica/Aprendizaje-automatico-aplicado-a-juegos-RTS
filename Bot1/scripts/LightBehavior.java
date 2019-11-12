@@ -8,34 +8,14 @@ import rts.units.UnitTypeTable;
 
 enum LightBehType{LESSHP,LESSPERCHP,CLOSEST};
 
-public class LightBehavior {
+public class LightBehavior extends UnitBehavior{
 	
 	private LightBehType lightBehType;
 	
-	private UnitTypeTable utt;
-	private UnitType workerType;
-	private UnitType baseType;
-	private UnitType barracksType;
-	private UnitType lightType;
-	private UnitType heavyType;
-	private UnitType rangedType;
-	
-	
 	public LightBehavior(UnitTypeTable a_utt, LightBehType a_lightBehType) {
-		reset(utt);
+		super(a_utt);
 		lightBehType = a_lightBehType;
 	}
-	
-	public void reset(UnitTypeTable a_utt)  
-    {
-        utt = a_utt;
-        workerType = utt.getUnitType("Worker");
-        baseType = utt.getUnitType("Base");
-        barracksType = utt.getUnitType("Barracks");
-        lightType = utt.getUnitType("Light");
-        heavyType = utt.getUnitType("Heavy");
-        rangedType = utt.getUnitType("Ranged");
-    }   
 	
 	public void lessHPAttack(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		Unit lowestHPEnemy = null;

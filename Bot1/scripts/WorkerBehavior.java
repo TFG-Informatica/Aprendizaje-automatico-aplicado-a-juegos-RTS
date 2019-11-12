@@ -13,17 +13,9 @@ import rts.units.UnitTypeTable;
 
 enum WorkBehType{HARVESTER, AGGRESSIVE};
 
-public class WorkerBehavior {
+public class WorkerBehavior extends UnitBehavior{
 	
 	private WorkBehType workBehType;
-	
-	private UnitTypeTable utt;
-	private UnitType workerType;
-	private UnitType baseType;
-	private UnitType barracksType;
-	private UnitType lightType;
-	private UnitType heavyType;
-	private UnitType rangedType;
 	
 	private int buildingBase;
 	private int buildingBarracks;
@@ -31,23 +23,11 @@ public class WorkerBehavior {
 	private List<Integer> reservedPositions;
 	private int resourcesUsed;
 	
-	
 	public WorkerBehavior(UnitTypeTable a_utt, WorkBehType a_workBehType) {
-		reset(utt);
+		super(a_utt);
 		workBehType = a_workBehType;
 		resetAtributes();
 	}
-	
-	public void reset(UnitTypeTable a_utt)  
-    {
-        utt = a_utt;
-        workerType = utt.getUnitType("Worker");
-        baseType = utt.getUnitType("Base");
-        barracksType = utt.getUnitType("Barracks");
-        lightType = utt.getUnitType("Light");
-        heavyType = utt.getUnitType("Heavy");
-        rangedType = utt.getUnitType("Ranged");
-    }   
 	
 	public void harvesterWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nbases = 0;

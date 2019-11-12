@@ -1,5 +1,6 @@
 package scripts;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import ai.abstraction.AbstractionLayerAI;
@@ -7,7 +8,10 @@ import ai.abstraction.pathfinding.PathFinding;
 import ai.core.AI;
 import ai.core.ParameterSpecification;
 import rts.GameState;
+import rts.PhysicalGameState;
+import rts.Player;
 import rts.PlayerAction;
+import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
 
@@ -18,7 +22,7 @@ public class GeneralScript extends AbstractionLayerAI {
 	private WorkBehType workBehType;
 	private LightBehType lightBehType;
 	private HeavyBehType heavyBehType;
-	private RangeBehType rangeBehType;
+	private RangedBehType rangeBehType;
 	
 	private BaseBehavior baseBeh;
 	private BarrackBehavior barBeh;
@@ -37,29 +41,40 @@ public class GeneralScript extends AbstractionLayerAI {
 
 	public GeneralScript(UnitTypeTable a_utt, PathFinding a_pf, BaseBehType a_baseBeh, BarBehType a_barBeh, 
 						WorkBehType a_workBeh, LightBehType a_lightBeh, HeavyBehType a_heavyBeh,
-						RangeBehType a_rangeBeh) {
+						RangedBehType a_rangeBeh) {
 		super(a_pf);
 		reset(a_utt);
 		baseBehType = a_baseBeh;
 		baseBeh = new BaseBehavior(utt, baseBehType);
 		barBehType = a_barBeh;
+		barBeh = new BarrackBehavior(utt, barBehType);
 		workBehType = a_workBeh;
+		workBeh = new WorkerBehavior(utt, workBehType);
 		lightBehType = a_lightBeh;
+		lightBeh = new LightBehavior(utt, lightBehType);
 		heavyBehType = a_heavyBeh;
+		heavyBeh = new HeavyBehavior(utt, heavyBehType);
 		rangeBehType = a_rangeBeh;
+		rangeBeh = new RangedBehavior(utt, rangeBehType);
 	}
 	
 	public GeneralScript(UnitTypeTable a_utt, PathFinding a_pf, int timebudget, int cyclesbudget, BaseBehType a_baseBeh, 
 						BarBehType a_barBeh, WorkBehType a_workBeh, LightBehType a_lightBeh, 
-						HeavyBehType a_heavyBeh, RangeBehType a_rangeBeh) {
+						HeavyBehType a_heavyBeh, RangedBehType a_rangeBeh) {
         super(a_pf, timebudget, cyclesbudget);
         reset(a_utt);
-        baseBeh = a_baseBeh;
-		barBeh = a_barBeh;
-		workBeh = a_workBeh;
-		lightBeh = a_lightBeh;
-		heavyBeh = a_heavyBeh;
-		rangeBeh = a_rangeBeh;
+        baseBehType = a_baseBeh;
+		baseBeh = new BaseBehavior(utt, baseBehType);
+		barBehType = a_barBeh;
+		barBeh = new BarrackBehavior(utt, barBehType);
+		workBehType = a_workBeh;
+		workBeh = new WorkerBehavior(utt, workBehType);
+		lightBehType = a_lightBeh;
+		lightBeh = new LightBehavior(utt, lightBehType);
+		heavyBehType = a_heavyBeh;
+		heavyBeh = new HeavyBehavior(utt, heavyBehType);
+		rangeBehType = a_rangeBeh;
+		rangeBeh = new RangedBehavior(utt, rangeBehType);
     }
 	
 	public void reset(UnitTypeTable a_utt)  
@@ -75,14 +90,36 @@ public class GeneralScript extends AbstractionLayerAI {
 	
 	@Override
 	public PlayerAction getAction(int player, GameState gs) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		PhysicalGameState pgs = gs.getPhysicalGameState();
+		Player p = gs.getPlayer(player);
+		workBeh.resetAtributes();
+		
+		for (Unit u : pgs.getUnits()) {
+			if (u.getPlayer() == player && gs.getActionAssignment(u) == null) {
+				if (u.getType() == baseType)
+					baseBeh.behavior(this, u, p, pgs);
+				else if (u.getType() == workerType)
+					workBeh.behavior(this, u, p, pgs);
+				else if (u.getType() == barracksType)
+					barBeh.behavior(this, u, p, pgs);
+				else if (u.getType() == lightType)
+					lightBeh.behavior(this, u, p, pgs);
+				else if (u.getType() == heavyType)
+					heavyBeh.behavior(this, u, p, pgs);
+				else if (u.getType() == rangedType)
+					rangeBeh.behavior(this, u, p, pgs);
+			}
+		}
+
+		// This method simply takes all the unit actions executed so far, and packages
+		// them into a PlayerAction
+		return translateActions(player, gs);
 	}
 
 	@Override
 	public AI clone() {
-		return new GeneralScript(utt, pf, getTimeBudget(), getIterationsBudget(), baseBeh, 
-									barBeh,	workBeh, lightBeh, heavyBeh, rangeBeh);
+		return new GeneralScript(utt, pf, getTimeBudget(), getIterationsBudget(), baseBehType, 
+									barBehType,	workBehType, lightBehType, heavyBehType, rangeBehType);
 	}
 
 	@Override

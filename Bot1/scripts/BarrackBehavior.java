@@ -8,34 +8,14 @@ import rts.units.UnitTypeTable;
 
 enum BarBehType{LIGHT, HEAVY, RANGED, LESS};
 
-public class BarrackBehavior {
+public class BarrackBehavior extends UnitBehavior{
 	
-	private BarBehType barBehType;
-	
-	private UnitTypeTable utt;
-	private UnitType workerType;
-	private UnitType baseType;
-	private UnitType barracksType;
-	private UnitType lightType;
-	private UnitType heavyType;
-	private UnitType rangedType;
-	
+	private BarBehType barBehType;	
 	
 	public BarrackBehavior(UnitTypeTable a_utt, BarBehType a_barBehType) {
-		reset(utt);
+		super(a_utt);
 		barBehType = a_barBehType;
 	}
-	
-	public void reset(UnitTypeTable a_utt)  
-    {
-        utt = a_utt;
-        workerType = utt.getUnitType("Worker");
-        baseType = utt.getUnitType("Base");
-        barracksType = utt.getUnitType("Barracks");
-        lightType = utt.getUnitType("Light");
-        heavyType = utt.getUnitType("Heavy");
-        rangedType = utt.getUnitType("Ranged");
-    }
 	
 	public void trainLight(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nworkers = 0;
