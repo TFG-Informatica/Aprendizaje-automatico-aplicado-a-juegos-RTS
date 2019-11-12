@@ -3,13 +3,11 @@ package scripts;
 import rts.PhysicalGameState;
 import rts.Player;
 import rts.units.Unit;
-import rts.units.UnitType;
 import rts.units.UnitTypeTable;
-
-enum BarBehType{LIGHT, HEAVY, RANGED, LESS};
 
 public class BarrackBehavior extends UnitBehavior{
 	
+	public enum BarBehType{LIGHT, HEAVY, RANGED, LESS};
 	private BarBehType barBehType;	
 	
 	public BarrackBehavior(UnitTypeTable a_utt, BarBehType a_barBehType) {

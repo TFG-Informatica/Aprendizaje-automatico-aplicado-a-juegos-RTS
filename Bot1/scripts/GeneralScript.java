@@ -1,6 +1,5 @@
 package scripts;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import ai.abstraction.AbstractionLayerAI;
@@ -14,6 +13,12 @@ import rts.PlayerAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
+import scripts.BarrackBehavior.BarBehType;
+import scripts.BaseBehavior.BaseBehType;
+import scripts.HeavyBehavior.HeavyBehType;
+import scripts.LightBehavior.LightBehType;
+import scripts.RangedBehavior.RangedBehType;
+import scripts.WorkerBehavior.WorkBehType;
 
 public class GeneralScript extends AbstractionLayerAI {
 	

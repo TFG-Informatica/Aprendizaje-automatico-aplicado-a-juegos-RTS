@@ -3,13 +3,11 @@ package scripts;
 import rts.PhysicalGameState;
 import rts.Player;
 import rts.units.Unit;
-import rts.units.UnitType;
 import rts.units.UnitTypeTable;
-
-enum LightBehType{LESSHP,LESSPERCHP,CLOSEST};
 
 public class LightBehavior extends UnitBehavior{
 	
+	public enum LightBehType{LESSHP,LESSPERCHP,CLOSEST};
 	private LightBehType lightBehType;
 	
 	public LightBehavior(UnitTypeTable a_utt, LightBehType a_lightBehType) {

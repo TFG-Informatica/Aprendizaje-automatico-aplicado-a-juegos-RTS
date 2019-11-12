@@ -5,13 +5,11 @@ import ai.abstraction.Train;
 import rts.PhysicalGameState;
 import rts.Player;
 import rts.units.Unit;
-import rts.units.UnitType;
 import rts.units.UnitTypeTable;
-
-enum BaseBehType{ONEWORKER, TWOWORKER, THREEWORKER, RUSHWORKER};
 
 public class BaseBehavior extends UnitBehavior{
 	
+	public enum BaseBehType{ONEWORKER, TWOWORKER, THREEWORKER, RUSHWORKER};
 	private BaseBehType baseBehType;	
 	
 	public BaseBehavior(UnitTypeTable a_utt, BaseBehType a_baseBehType) {

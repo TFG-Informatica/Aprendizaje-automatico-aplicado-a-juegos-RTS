@@ -7,14 +7,12 @@ import java.util.Random;
 import rts.PhysicalGameState;
 import rts.Player;
 import rts.units.Unit;
-import rts.units.UnitType;
 import rts.units.UnitTypeTable;
 import util.Pair;
 
-enum RangedBehType{LESSHP,LESSPERCHP,CLOSEST}
-
 public class RangedBehavior extends UnitBehavior{
 	
+	public enum RangedBehType{LESSHP,LESSPERCHP,CLOSEST};
 	private RangedBehType rangedBehType;
 
 	public RangedBehavior(UnitTypeTable a_utt, RangedBehType a_rangedBehType) {

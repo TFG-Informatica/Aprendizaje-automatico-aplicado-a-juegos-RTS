@@ -3,13 +3,11 @@ package scripts;
 import rts.PhysicalGameState;
 import rts.Player;
 import rts.units.Unit;
-import rts.units.UnitType;
 import rts.units.UnitTypeTable;
-
-enum HeavyBehType{LESSHP,LESSPERCHP,CLOSEST};
 
 public class HeavyBehavior extends UnitBehavior{
 	
+	public enum HeavyBehType{LESSHP,LESSPERCHP,CLOSEST};
 	private HeavyBehType heavyBehType;
 	
 	public HeavyBehavior(UnitTypeTable a_utt, HeavyBehType a_heavyBehType) {

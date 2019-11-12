@@ -8,13 +8,11 @@ import ai.abstraction.Harvest;
 import rts.PhysicalGameState;
 import rts.Player;
 import rts.units.Unit;
-import rts.units.UnitType;
 import rts.units.UnitTypeTable;
-
-enum WorkBehType{HARVESTER, AGGRESSIVE};
 
 public class WorkerBehavior extends UnitBehavior{
 	
+	public enum WorkBehType{HARVESTER, AGGRESSIVE};
 	private WorkBehType workBehType;
 	
 	private int buildingBase;
@@ -32,7 +30,6 @@ public class WorkerBehavior extends UnitBehavior{
 	public void harvesterWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nbases = 0;
         int nbarracks = 0;
-        int resourcesUsed = 0;
 
         for (Unit u2 : pgs.getUnits()) {
             if (u2.getType() == baseType
@@ -94,7 +91,6 @@ public class WorkerBehavior extends UnitBehavior{
 	
 	public void aggressiveWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nbases = 0;
-		int resourcesUsed = 0;
 
         for (Unit u2 : pgs.getUnits()) {
             if (u2.getType() == baseType
@@ -108,7 +104,7 @@ public class WorkerBehavior extends UnitBehavior{
             // build a base:
             gs.buildIfNotAlreadyBuilding(u,baseType,u.getX(),u.getY(),reservedPositions,p,pgs);
             resourcesUsed += baseType.cost;
-        } else if (nbases == 0 && buildingBarracks == 0) {
+        } else if (nbases == 0 && buildingBase == 0) {
             // harvest resources for building a base:
         	Unit closestBase = null;
             Unit closestResource = null;
