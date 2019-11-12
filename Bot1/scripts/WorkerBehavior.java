@@ -92,7 +92,7 @@ public class WorkerBehavior extends UnitBehavior{
 		
 	}
 	
-	public void aggressiveWorkerBeh(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+	public void aggressiveWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		int nbases = 0;
 		int resourcesUsed = 0;
 
@@ -174,6 +174,19 @@ public class WorkerBehavior extends UnitBehavior{
 		buildingBarracks = 0;
 		reservedPositions = new LinkedList<Integer>();
 		resourcesUsed = 0;
+	}
+
+	@Override
+	public void behavior(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+		switch (workBehType) {
+		case AGGRESSIVE:
+			aggressiveWorker(gs, u, p, pgs);
+			break;
+		case HARVESTER:
+			harvesterWorker(gs, u, p, pgs);
+			break;
+		}
+		
 	}
 	
 }

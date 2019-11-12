@@ -76,5 +76,20 @@ public class LightBehavior extends UnitBehavior{
 	public void setType(LightBehType a_lightBehType) {
 		lightBehType = a_lightBehType;
 	}
+
+	@Override
+	public void behavior(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+		switch (lightBehType) {
+		case CLOSEST:
+			closestAttack(gs, u, p, pgs);
+			break;
+		case LESSHP:
+			lessHPAttack(gs, u, p, pgs);
+			break;
+		case LESSPERCHP:
+			lessPercHPAttack(gs, u, p, pgs);
+			break;
+		}
+	}
 	
 }
