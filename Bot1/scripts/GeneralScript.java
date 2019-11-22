@@ -1,5 +1,6 @@
 package scripts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ai.abstraction.AbstractionLayerAI;
@@ -122,9 +123,24 @@ public class GeneralScript extends AbstractionLayerAI {
 	}
 
 	@Override
-	public AI clone() {
+	public GeneralScript clone() {
 		return new GeneralScript(utt, pf, getTimeBudget(), getIterationsBudget(), baseBehType, 
 									barBehType,	workBehType, lightBehType, heavyBehType, rangeBehType);
+	}
+	
+	public List<String> getBehaviorTypes() {
+		List<String> param = new ArrayList<String>();
+		param.add(baseBehType.toString());
+		param.add(barBehType.toString());
+		param.add(workBehType.toString());
+		param.add(lightBehType.toString());
+		param.add(heavyBehType.toString());
+		param.add(rangeBehType.toString());
+		return param;
+	}
+	
+	public UnitTypeTable getUtt() {
+		return utt;
 	}
 
 	@Override
