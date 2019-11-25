@@ -104,6 +104,7 @@ public class RangedBehavior extends UnitBehavior{
 				if (nPos.m_a >= 0 && nPos.m_b >= 0 && nPos.m_a < pgs.getWidth() && nPos.m_b < pgs.getHeight()
 						&& free[nPos.m_a][nPos.m_b])
 					newPos = nPos;
+				++r;
 			}
 			if (newPos != null)
 				gs.move(u, newPos.m_a, newPos.m_b);

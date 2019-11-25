@@ -5,7 +5,6 @@ import java.util.List;
 
 import ai.abstraction.AbstractionLayerAI;
 import ai.abstraction.pathfinding.PathFinding;
-import ai.core.AI;
 import ai.core.ParameterSpecification;
 import rts.GameState;
 import rts.PhysicalGameState;
@@ -143,6 +142,15 @@ public class GeneralScript extends AbstractionLayerAI {
 		return utt;
 	}
 
+	public String toString() {
+		List<String> param = this.getBehaviorTypes();
+		String res = "";
+		for (String s : param) {
+			res = res + s + ", ";
+		}
+		return res;
+	}
+	
 	@Override
 	public List<ParameterSpecification> getParameters() {
 		// Lista de parametros que de momento no se sabe para que vale.
