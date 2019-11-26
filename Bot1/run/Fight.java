@@ -26,15 +26,15 @@ public static void main(String[] args) {
 		GameState gs = null;
 		List<AI> bots = new ArrayList<AI>();
 		bots.add(new GeneralScript(utt, new AStarPathFinding(), -1, -1,
-				BaseBehType.THREEWORKER, BarBehType.HEAVY, WorkBehType.HARVESTER, 
-				LightBehType.LESSPERCHP, HeavyBehType.LESSPERCHP, RangedBehType.LESSHP));
+				BaseBehType.ONEWORKER, BarBehType.HEAVY, WorkBehType.HARVESTER, 
+				LightBehType.LESSPERCHP, HeavyBehType.CLOSEST, RangedBehType.CLOSEST));
 		bots.add(new GeneralScript(utt, new AStarPathFinding(), -1, -1,
-				BaseBehType.THREEWORKER, BarBehType.RANGED, WorkBehType.HARVESTER, 
-				LightBehType.LESSHP, HeavyBehType.CLOSEST, RangedBehType.LESSHP));
+				BaseBehType.TWOWORKER, BarBehType.RANGED, WorkBehType.HARVESTER, 
+				LightBehType.LESSPERCHP, HeavyBehType.CLOSEST, RangedBehType.LESSPERCHP));
 		try {
-			gs = new GameState(PhysicalGameState.load("maps/8x8/OneBaseWorker8x8.xml",utt),utt);
-			ThreadedTournament.evaluate(bots, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-					3000, 300, true, System.out, -1, false, false, "");	
+			gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml",utt),utt);
+			Tournament.evaluate(bots, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+					3000, 300, true, System.out, -1, false, false, "traces/");	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
