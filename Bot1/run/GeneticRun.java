@@ -17,9 +17,9 @@ public class GeneticRun {
 		GameState gs = null;
 		ArrayList<GeneralScript> result = null;
 		try {
-			gs = new GameState(PhysicalGameState.load("maps/8x8/OneBaseWorker8x8.xml",utt),utt);
+			gs = new GameState(PhysicalGameState.load("maps/8x8/basesWorkers8x8.xml",utt),utt);
 			Genetic g = new Genetic(20, 5, 5, utt, new AStarPathFinding(), gs);
-			g.evolutionaryAlgorithm(50);	
+			g.evolutionaryAlgorithm(10);	
 			result = g.getBestPopulation();
 		} catch (Exception e) {
 			e.printStackTrace();
