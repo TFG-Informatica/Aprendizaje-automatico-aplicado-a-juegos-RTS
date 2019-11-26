@@ -6,6 +6,7 @@ import java.util.List;
 
 import ai.abstraction.pathfinding.AStarPathFinding;
 import ai.core.AI;
+import ia.ThreadedTournament;
 import ia.Tournament;
 import rts.GameState;
 import rts.PhysicalGameState;
@@ -32,8 +33,8 @@ public static void main(String[] args) {
 				LightBehType.LESSHP, HeavyBehType.CLOSEST, RangedBehType.LESSHP));
 		try {
 			gs = new GameState(PhysicalGameState.load("maps/8x8/OneBaseWorker8x8.xml",utt),utt);
-			Tournament.evaluate(bots, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-					3000, 300, true, System.out, -1, false, false, "Traza de ruben:");	
+			ThreadedTournament.evaluate(bots, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+					3000, 300, true, System.out, -1, false, false, "");	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

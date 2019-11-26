@@ -164,7 +164,7 @@ public class Genetic {
 			ArrayList<GeneralScript> newPopulation = new ArrayList<GeneralScript>();
 			try {
 				evaluation = Tournament.evaluate(population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-						3000, 300, false, System.out, -1, false, false, "");
+						2000, 100, false, System.out, -1, false, false, "");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -176,7 +176,7 @@ public class Genetic {
 		}
 		try {
 			evaluation = Tournament.evaluate(population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-					3000, 300, false, System.out, -1, false, false, "");
+					2000, 300, false, System.out, -1, false, false, "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

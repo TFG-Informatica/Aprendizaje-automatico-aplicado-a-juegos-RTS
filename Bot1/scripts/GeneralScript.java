@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ai.abstraction.AbstractionLayerAI;
+import ai.abstraction.pathfinding.AStarPathFinding;
 import ai.abstraction.pathfinding.PathFinding;
 import ai.core.ParameterSpecification;
 import rts.GameState;
@@ -121,9 +122,11 @@ public class GeneralScript extends AbstractionLayerAI {
 		return translateActions(player, gs);
 	}
 
+	// new AStarPathFinding esta mal pero no se puede arreglar si hacemos hilos
+	
 	@Override
 	public GeneralScript clone() {
-		return new GeneralScript(utt, pf, getTimeBudget(), getIterationsBudget(), baseBehType, 
+		return new GeneralScript(utt, new AStarPathFinding(), getTimeBudget(), getIterationsBudget(), baseBehType, 
 									barBehType,	workBehType, lightBehType, heavyBehType, rangeBehType);
 	}
 	
