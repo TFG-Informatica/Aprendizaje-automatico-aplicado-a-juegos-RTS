@@ -32,10 +32,11 @@ public class Genetic {
 	private int popSize; 
 	private int bestSize;
 	private int eliteSize;
+	private boolean visual;
 	
 	
 	public Genetic (int a_popSize, int a_bestSize, int a_eliteSize, UnitTypeTable a_utt, PathFinding a_pf, 
-					GameState a_gs) {
+					GameState a_gs,  boolean a_visual) {
 		gs = a_gs;
 		utt = a_utt;
 		popSize = a_popSize;
@@ -43,6 +44,7 @@ public class Genetic {
 		eliteSize = a_eliteSize;
 		evaluation = new int[popSize];
 		completeSet = new ArrayList<GeneralScript>();
+		visual = a_visual;
 		
 		for (BaseBehType baseBehType : BaseBehType.values()) 
 			for (BarBehType barBehType : BarBehType.values())
@@ -164,8 +166,8 @@ public class Genetic {
 		while (k < maxGen) {
 			ArrayList<GeneralScript> newPopulation = new ArrayList<GeneralScript>();
 			try {
-				evaluation = Tournament.evaluate(population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-						2000, 100, true, System.out, -1, false, false, "traces/");
+				evaluation = ThreadedTournament.evaluate(population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+						2000, 100, visual, System.out, -1, false, false, "traces/");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -176,8 +178,8 @@ public class Genetic {
 			++k;
 		}
 		try {
-			evaluation = Tournament.evaluate(population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-					2000, 100, false, System.out, -1, false, false, "traces/");
+			evaluation = ThreadedTournament.evaluate(population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+					2000, 100, visual, System.out, -1, false, false, "traces/");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

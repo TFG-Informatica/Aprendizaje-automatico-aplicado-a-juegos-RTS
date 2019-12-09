@@ -8,6 +8,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 import rts.GameState;
@@ -20,7 +22,7 @@ import rts.units.UnitTypeTable;
 
 public class ThreadedTournament {
 
-	private static class Game extends Thread {
+	private static class Game implements Runnable {
 		
 		private int ai1_idx;
 		private int ai2_idx;
@@ -207,6 +209,7 @@ public class ThreadedTournament {
 	}
 	
 	public static int DEBUG = 0;
+	public static boolean  WRITE = false;
 
 	public static int[] evaluate(List<AI> bots, List<PhysicalGameState> maps, UnitTypeTable utt, int iterations,
 			int max_cycles, int max_inactive_cycles, boolean visualize, PrintStream out,
@@ -228,7 +231,7 @@ public class ThreadedTournament {
 		Semaphore winSem = new Semaphore(1);
 		Semaphore loseSem = new Semaphore(1);
 		
-		ArrayList<Thread> threads = new ArrayList<Thread>();
+		ExecutorService executor = Executors.newFixedThreadPool(4);
 
 		for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
 			for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
@@ -242,76 +245,76 @@ public class ThreadedTournament {
 					for (int i = 0; i < iterations; i++) {
 						AI ai1 = bots.get(ai1_idx).clone();
 						AI ai2 = bots2.get(ai2_idx).clone();
-						Game g = new Game(ai1_idx, ai2_idx, ai1, ai2, visualize, pgs, utt, partiallyObservable,
+						Runnable g = new Game(ai1_idx, ai2_idx, ai1, ai2, visualize, pgs, utt, partiallyObservable,
 								max_cycles, max_inactive_cycles, ties, tie_time, wins, win_time, loses, lose_time,
 								tieSem, winSem, loseSem);
-						threads.add(g);
-						g.start();
-						System.out.println("Hilo " + threads.size() + " lanzado.");
+						executor.execute(g);
 					}
 				}
 			}
 		}
+		
+		executor.shutdown();  
+        while (!executor.isTerminated());
+		
+		if (WRITE) {
+			out.println("Wins: ");
+			for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
+				for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
+					out.print(wins[ai1_idx][ai2_idx] + ", ");
+				}
+				out.println("");
+			}
+			out.println("Ties: ");
+			for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
+				for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
+					out.print(ties[ai1_idx][ai2_idx] + ", ");
+				}
+				out.println("");
+			}
+			out.println("Loses: ");
+			for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
+				for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
+					out.print(loses[ai1_idx][ai2_idx] + ", ");
+				}
+				out.println("");
+			}
+			out.println("Win average time: ");
+			for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
+				for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
+					if (wins[ai1_idx][ai2_idx] > 0) {
+						out.print((win_time[ai1_idx][ai2_idx] / wins[ai1_idx][ai2_idx]) + ", ");
+					} else {
+						out.print("-, ");
+					}
+				}
+				out.println("");
+			}
+			out.println("Tie average time: ");
+			for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
+				for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
+					if (ties[ai1_idx][ai2_idx] > 0) {
+						out.print((tie_time[ai1_idx][ai2_idx] / ties[ai1_idx][ai2_idx]) + ", ");
+					} else {
+						out.print("-, ");
+					}
+				}
+				out.println("");
+			}
+			out.println("Lose average time: ");
+			for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
+				for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
+					if (loses[ai1_idx][ai2_idx] > 0) {
+						out.print((lose_time[ai1_idx][ai2_idx] / loses[ai1_idx][ai2_idx]) + ", ");
+					} else {
+						out.print("-, ");
+					}
+				}
+				out.println("");
+			}
+			out.flush();
+		}
 
-		for (Thread th : threads)
-			th.join();
-		
-		out.println("Wins: ");
-		for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
-			for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
-				out.print(wins[ai1_idx][ai2_idx] + ", ");
-			}
-			out.println("");
-		}
-		out.println("Ties: ");
-		for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
-			for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
-				out.print(ties[ai1_idx][ai2_idx] + ", ");
-			}
-			out.println("");
-		}
-		out.println("Loses: ");
-		for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
-			for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
-				out.print(loses[ai1_idx][ai2_idx] + ", ");
-			}
-			out.println("");
-		}
-		out.println("Win average time: ");
-		for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
-			for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
-				if (wins[ai1_idx][ai2_idx] > 0) {
-					out.print((win_time[ai1_idx][ai2_idx] / wins[ai1_idx][ai2_idx]) + ", ");
-				} else {
-					out.print("-, ");
-				}
-			}
-			out.println("");
-		}
-		out.println("Tie average time: ");
-		for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
-			for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
-				if (ties[ai1_idx][ai2_idx] > 0) {
-					out.print((tie_time[ai1_idx][ai2_idx] / ties[ai1_idx][ai2_idx]) + ", ");
-				} else {
-					out.print("-, ");
-				}
-			}
-			out.println("");
-		}
-		out.println("Lose average time: ");
-		for (int ai1_idx = 0; ai1_idx < bots.size(); ai1_idx++) {
-			for (int ai2_idx = 0; ai2_idx < bots.size(); ai2_idx++) {
-				if (loses[ai1_idx][ai2_idx] > 0) {
-					out.print((lose_time[ai1_idx][ai2_idx] / loses[ai1_idx][ai2_idx]) + ", ");
-				} else {
-					out.print("-, ");
-				}
-			}
-			out.println("");
-		}
-		out.flush();
-		
 		int[] cuenta = new int[bots.size()];
 		
 		for (int i = 0; i < bots.size(); ++i) {
