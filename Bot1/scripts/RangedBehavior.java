@@ -12,7 +12,7 @@ import util.Pair;
 
 public class RangedBehavior extends UnitBehavior{
 	
-	public enum RangedBehType{LESSHP,LESSPERCHP,CLOSEST};
+	public enum RangedBehType{LESSHP,LESSPERCHP,CLOSEST,CLOSESTDIRECT};
 	private RangedBehType rangedBehType;
 
 	public RangedBehavior(UnitTypeTable a_utt, RangedBehType a_rangedBehType) {
@@ -68,6 +68,23 @@ public class RangedBehavior extends UnitBehavior{
         }
         if (closestEnemy != null) {
         	kite(gs, u, closestEnemy, pgs);
+        }
+	}
+	
+	public void closestDirectAttack(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+		Unit closestEnemy = null;
+        int closestDistance = 0;
+        for (Unit u2 : pgs.getUnits()) {
+            if (u2.getPlayer() >= 0 && u2.getPlayer() != p.getID()) {
+                int d = Math.abs(u2.getX() - u.getX()) + Math.abs(u2.getY() - u.getY());
+                if (closestEnemy == null || d < closestDistance) {
+                    closestEnemy = u2;
+                    closestDistance = d;
+                }
+            }
+        }
+        if (closestEnemy != null) {
+        	gs.attack(u, closestEnemy);
         }
 	}
 	
@@ -133,6 +150,9 @@ public class RangedBehavior extends UnitBehavior{
 			break;
 		case LESSPERCHP:
 			lessPercHPAttack(gs, u, p, pgs);
+			break;
+		case CLOSESTDIRECT:
+			closestDirectAttack(gs, u, p, pgs);
 			break;
 		}
 	}

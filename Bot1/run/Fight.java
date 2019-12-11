@@ -20,21 +20,19 @@ import scripts.RangedBehavior.RangedBehType;
 import scripts.WorkerBehavior.WorkBehType;
 
 public class Fight {
-public static void main(String[] args) {		
-		
+	public static void main(String[] args) {
+
 		UnitTypeTable utt = new UnitTypeTable();
 		GameState gs = null;
 		List<AI> bots = new ArrayList<AI>();
-		bots.add(new GeneralScript(utt, new AStarPathFinding(), -1, -1,
-				BaseBehType.ONEWORKER, BarBehType.HEAVY, WorkBehType.HARVESTER, 
-				LightBehType.LESSPERCHP, HeavyBehType.CLOSEST, RangedBehType.CLOSEST));
-		bots.add(new GeneralScript(utt, new AStarPathFinding(), -1, -1,
-				BaseBehType.TWOWORKER, BarBehType.RANGED, WorkBehType.HARVESTER, 
-				LightBehType.LESSPERCHP, HeavyBehType.CLOSEST, RangedBehType.LESSPERCHP));
+		bots.add(new GeneralScript(utt, new AStarPathFinding(), -1, -1, BaseBehType.RUSHWORKER, BarBehType.RANGED,
+				WorkBehType.HARVESTER, LightBehType.LESSHP, HeavyBehType.CLOSEST, RangedBehType.CLOSEST));
+		bots.add(new GeneralScript(utt, new AStarPathFinding(), -1, -1, BaseBehType.RUSHWORKER, BarBehType.LIGHT,
+				WorkBehType.HARVESTER, LightBehType.CLOSEST, HeavyBehType.LESSPERCHP, RangedBehType.CLOSESTDIRECT));
 		try {
-			gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml",utt),utt);
-			Tournament.evaluate(bots, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-					3000, 300, true, System.out, -1, false, false, "traces/");	
+			gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
+			Tournament.evaluate(bots, Arrays.asList(gs.getPhysicalGameState()), utt, 1, 3000, 300, true, System.out, -1,
+					true, false, "traces/");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

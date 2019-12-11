@@ -2,6 +2,7 @@ package ia;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -25,9 +26,9 @@ public class Genetic {
 	
 	private GameState gs;
 	private UnitTypeTable utt;
-	private ArrayList<GeneralScript> completeSet;
+	private List<AI> completeSet;
 	private List<AI> population;
-	private ArrayList<GeneralScript> bestPopulation;
+	private List<AI> bestPopulation;
 	private int evaluation[];
 	private int popSize; 
 	private int bestSize;
@@ -43,7 +44,7 @@ public class Genetic {
 		bestSize = a_bestSize;
 		eliteSize = a_eliteSize;
 		evaluation = new int[popSize];
-		completeSet = new ArrayList<GeneralScript>();
+		completeSet = new ArrayList<AI>();
 		visual = a_visual;
 		
 		for (BaseBehType baseBehType : BaseBehType.values()) 
@@ -56,7 +57,7 @@ public class Genetic {
 								workBehType, lightBehType, heavyBehType, rangedBehType));
 		
 		population = new ArrayList<AI>();
-		bestPopulation = new ArrayList<GeneralScript>();
+		bestPopulation = new ArrayList<AI>();
 
 	}
 
@@ -166,7 +167,10 @@ public class Genetic {
 		while (k < maxGen) {
 			ArrayList<GeneralScript> newPopulation = new ArrayList<GeneralScript>();
 			try {
-				evaluation = ThreadedTournament.evaluate(population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+				List<AI> popAux = new LinkedList<>();
+				for (AI bot : population)
+					popAux.add(bot.clone());
+				evaluation = ThreadedTournament.evaluate(population, popAux, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
 						2000, 100, visual, System.out, -1, false, false, "traces/");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -176,14 +180,18 @@ public class Genetic {
 			mutate(newPopulation);
 			elite(newPopulation);
 			++k;
-		}
+			
+			System.out.println("Generación " + k + " de " + maxGen);
+		} 
 		try {
-			evaluation = ThreadedTournament.evaluate(population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+			List<AI> popAux = new LinkedList<>();
+			for (AI bot : population)
+				popAux.add(bot.clone());
+			evaluation = ThreadedTournament.evaluate(population, popAux, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
 					2000, 100, visual, System.out, -1, false, false, "traces/");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		bestPopulation = new ArrayList<GeneralScript>();
 		int[] evalCopy = evaluation.clone();
 		int bestEval = -100000, best = -1;
 		for (int i = 0; i < bestSize; ++i) {
@@ -199,8 +207,18 @@ public class Genetic {
 		}
 	}
 	
-	public ArrayList<GeneralScript> getBestPopulation() {
-		return (ArrayList<GeneralScript>) bestPopulation.clone();
+	public List<AI> getBestPopulation() {
+		List<AI> aux = new LinkedList<>();
+		for (AI bot : bestPopulation)
+			aux.add(bot.clone());
+		return aux;
+	}
+	
+	public List<AI> getCompleteSet() {
+		List<AI> aux = new LinkedList<>();
+		for (AI bot : completeSet)
+			aux.add(bot.clone());
+		return aux;
 	}
 	
 }
