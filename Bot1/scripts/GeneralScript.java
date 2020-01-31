@@ -122,8 +122,8 @@ public class GeneralScript extends AbstractionLayerAI {
 		return translateActions(player, gs);
 	}
 
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	// new AStarPathFinding esta mal pero no se puede arreglar si hacemos hilos
-	
 	@Override
 	public GeneralScript clone() {
 		return new GeneralScript(utt, new AStarPathFinding(), getTimeBudget(), getIterationsBudget(), baseBehType, 
