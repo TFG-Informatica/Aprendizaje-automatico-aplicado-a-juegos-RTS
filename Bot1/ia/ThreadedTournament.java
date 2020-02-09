@@ -87,7 +87,7 @@ public class ThreadedTournament {
 
 				boolean gameover = false;
 				do {
-					//System.gc();
+					// System.gc();
 					PlayerAction pa1 = null, pa2 = null;
 					if (partiallyObservable) {
 						try {
