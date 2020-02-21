@@ -5,8 +5,6 @@ import gui.PhysicalGameStateJFrame;
 import gui.PhysicalGameStatePanel;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -155,7 +153,7 @@ public class ThreadedTournament {
 					}
 					wins = wins;
 					win_time = win_time;
-					wins[ai1_idx][ai2_idx]++;
+					++wins[ai1_idx][ai2_idx];
 					win_time[ai1_idx][ai2_idx] += gs.getTime();
 					winSem.release();
 				} else if (winner == 1) {
@@ -166,7 +164,7 @@ public class ThreadedTournament {
 					}
 					loses = loses;
 					lose_time = lose_time;
-					loses[ai1_idx][ai2_idx]++;
+					++loses[ai1_idx][ai2_idx];
 					lose_time[ai1_idx][ai2_idx] += gs.getTime();
 					loseSem.release();
 				}
@@ -178,7 +176,7 @@ public class ThreadedTournament {
 	public static int DEBUG = 0;
 	public static boolean  WRITE = false;
 
-	public static int[] evaluate(List<AI> bots1, List<AI> bots2, List<PhysicalGameState> maps, UnitTypeTable utt, int iterations,
+	public static double[] evaluate(List<AI> bots1, List<AI> bots2, List<PhysicalGameState> maps, UnitTypeTable utt, int iterations,
 			int max_cycles, int max_inactive_cycles, boolean visualize, PrintStream out,
 			int run_only_those_involving_this_AI, boolean skip_self_play, boolean partiallyObservable,
 			String tracePrefix) throws Exception {
@@ -278,7 +276,7 @@ public class ThreadedTournament {
 			out.flush();
 		}
 
-		int[] cuenta = new int[bots1.size()];
+		double[] cuenta = new double[bots1.size()];
 		
 		for (int i = 0; i < bots1.size(); ++i) {
 			cuenta[i] = 0;

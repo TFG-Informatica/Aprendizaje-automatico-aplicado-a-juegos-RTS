@@ -48,7 +48,7 @@ public class MultiFight {
 		OUT.flush();
 		System.out.flush();
 
-		int[] resultado = ThreadedTournament.evaluate(bots1, bots2, Arrays.asList(gs.getPhysicalGameState()), utt, iterations,
+		double[] resultado = ThreadedTournament.evaluate(bots1, bots2, Arrays.asList(gs.getPhysicalGameState()), utt, iterations,
 				3000, 100, true, OUT, -1, false, false, "traces/");
 
 		OUT.println("Competición final terminada. Resultados:");

@@ -5,7 +5,6 @@ import java.util.List;
 
 import ai.abstraction.AbstractionLayerAI;
 import ai.abstraction.pathfinding.AStarPathFinding;
-import ai.abstraction.pathfinding.PathFinding;
 import ai.core.ParameterSpecification;
 import rts.GameState;
 import rts.PhysicalGameState;
@@ -45,10 +44,10 @@ public class GeneralScript extends AbstractionLayerAI {
 	private UnitType heavyType;
 	private UnitType rangedType;
 
-	public GeneralScript(UnitTypeTable a_utt, PathFinding a_pf, BaseBehType a_baseBeh, BarBehType a_barBeh, 
+	public GeneralScript(UnitTypeTable a_utt, BaseBehType a_baseBeh, BarBehType a_barBeh, 
 						WorkBehType a_workBeh, LightBehType a_lightBeh, HeavyBehType a_heavyBeh,
 						RangedBehType a_rangeBeh) {
-		super(a_pf);
+		super(new AStarPathFinding());
 		reset(a_utt);
 		baseBehType = a_baseBeh;
 		baseBeh = new BaseBehavior(utt, baseBehType);
@@ -64,10 +63,10 @@ public class GeneralScript extends AbstractionLayerAI {
 		rangeBeh = new RangedBehavior(utt, rangeBehType);
 	}
 	
-	public GeneralScript(UnitTypeTable a_utt, PathFinding a_pf, int timebudget, int cyclesbudget, BaseBehType a_baseBeh, 
+	public GeneralScript(UnitTypeTable a_utt, int timebudget, int cyclesbudget, BaseBehType a_baseBeh, 
 						BarBehType a_barBeh, WorkBehType a_workBeh, LightBehType a_lightBeh, 
 						HeavyBehType a_heavyBeh, RangedBehType a_rangeBeh) {
-        super(a_pf, timebudget, cyclesbudget);
+        super(new AStarPathFinding(), timebudget, cyclesbudget);
         reset(a_utt);
         baseBehType = a_baseBeh;
 		baseBeh = new BaseBehavior(utt, baseBehType);
@@ -122,11 +121,9 @@ public class GeneralScript extends AbstractionLayerAI {
 		return translateActions(player, gs);
 	}
 
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	// new AStarPathFinding esta mal pero no se puede arreglar si hacemos hilos
 	@Override
 	public GeneralScript clone() {
-		return new GeneralScript(utt, new AStarPathFinding(), getTimeBudget(), getIterationsBudget(), baseBehType, 
+		return new GeneralScript(utt, getTimeBudget(), getIterationsBudget(), baseBehType, 
 									barBehType,	workBehType, lightBehType, heavyBehType, rangeBehType);
 	}
 	
@@ -147,9 +144,9 @@ public class GeneralScript extends AbstractionLayerAI {
 
 	public String toString() {
 		List<String> param = this.getBehaviorTypes();
-		String res = "";
-		for (String s : param) {
-			res = res + s + ", ";
+		String res = param.get(0);
+		for (int i = 1; i < param.size(); ++i) {
+			res += ", " + param.get(i);
 		}
 		return res;
 	}
