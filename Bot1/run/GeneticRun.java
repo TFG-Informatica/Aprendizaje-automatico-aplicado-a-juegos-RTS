@@ -23,8 +23,8 @@ public class GeneticRun {
 		GameState gs = null;
 		List<AI> result = null;
 		gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
-		MultiStageGenetic g = new MultiStageGenetic(20, 5, 5, 3, utt, gs, false);
-		g.evolutionaryAlgorithm(20);
+		MultiStageGenetic g = new MultiStageGenetic(100, 5, 10, 3, utt, gs, false);
+		g.evolutionaryAlgorithm(30);
 		result = g.getBestPopulation();
 
 		OUT.println("Resultado:");

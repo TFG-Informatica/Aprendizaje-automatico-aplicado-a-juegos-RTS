@@ -25,9 +25,9 @@ public class Fight {
 		UnitTypeTable utt = new UnitTypeTable();
 		GameState gs = null;
 		List<AI> bots = new ArrayList<AI>();
-		bots.add(new GeneralScript(utt, new AStarPathFinding(), -1, -1, BaseBehType.RUSHWORKER, BarBehType.RANGED,
+		bots.add(new GeneralScript(utt, BaseBehType.RUSHWORKER, BarBehType.RANGED,
 				WorkBehType.HARVESTER, LightBehType.LESSHP, HeavyBehType.CLOSEST, RangedBehType.CLOSEST));
-		bots.add(new GeneralScript(utt, new AStarPathFinding(), -1, -1, BaseBehType.RUSHWORKER, BarBehType.LIGHT,
+		bots.add(new GeneralScript(utt, BaseBehType.RUSHWORKER, BarBehType.LIGHT,
 				WorkBehType.HARVESTER, LightBehType.CLOSEST, HeavyBehType.LESSPERCHP, RangedBehType.CLOSESTDIRECT));
 		try {
 			gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
