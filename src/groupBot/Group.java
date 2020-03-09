@@ -1,4 +1,4 @@
-package GroupBot;
+package groupBot;
 
 import java.util.HashSet;
 import java.util.List;
