@@ -27,7 +27,7 @@ public class MultiStageGenetic {
 	
 	private PrintStream OUT = null;
 	
-	private final int TOURNSIZE = 10;
+	private final int TOURNSIZE = 3;
 	private final double MUT_CHANCE = 0.1;
 	private final int MAX_CYCLES = 2000;
 	
@@ -102,12 +102,14 @@ public class MultiStageGenetic {
 		ArrayList<MultiStageGeneralScript> crossPopulation = new ArrayList<MultiStageGeneralScript>();
 		while (crossPopulation.size() < newPopulation.size()) {
 			int p1 = r.nextInt(newPopulation.size());
+			MultiStageGeneralScript e1 = newPopulation.remove(p1);
 			int p2 = r.nextInt(newPopulation.size());
+			MultiStageGeneralScript e2 = newPopulation.remove(p2);
 			int x = r.nextInt(6);
 			int y = r.nextInt(phases);
 			
-			List<GeneralScript> scripts1 = newPopulation.get(p1).getScripts();
-			List<GeneralScript> scripts2 = newPopulation.get(p2).getScripts();
+			List<GeneralScript> scripts1 = e1.getScripts();
+			List<GeneralScript> scripts2 = e2.getScripts();
 			
 			List<String> param1 = scripts1.get(y).getBehaviorTypes();
 			List<String> param2 = scripts2.get(y).getBehaviorTypes();
@@ -132,12 +134,12 @@ public class MultiStageGenetic {
 			}
 			
 			scripts1.set(y, new GeneralScript(scripts1.get(y).getUtt(),
-					newPopulation.get(p1).getTimeBudget(), newPopulation.get(p1).getIterationsBudget(),
+					e1.getTimeBudget(), e1.getIterationsBudget(),
 					BaseBehType.valueOf(nparam1.get(0)), BarBehType.valueOf(nparam1.get(1)), 
 					WorkBehType.valueOf(nparam1.get(2)), LightBehType.valueOf(nparam1.get(3)),
 					HeavyBehType.valueOf(nparam1.get(4)), RangedBehType.valueOf(nparam1.get(5))));
 			scripts2.set(y, new GeneralScript(scripts2.get(y).getUtt(),
-					newPopulation.get(p1).getTimeBudget(), newPopulation.get(p1).getIterationsBudget(),
+					e1.getTimeBudget(), e1.getIterationsBudget(),
 					BaseBehType.valueOf(nparam2.get(0)), BarBehType.valueOf(nparam2.get(1)), 
 					WorkBehType.valueOf(nparam2.get(2)), LightBehType.valueOf(nparam2.get(3)),
 					HeavyBehType.valueOf(nparam2.get(4)), RangedBehType.valueOf(nparam2.get(5))));
@@ -200,7 +202,7 @@ public class MultiStageGenetic {
 		while (k < maxGen) {
 			ArrayList<MultiStageGeneralScript> newPopulation = new ArrayList<MultiStageGeneralScript>();
 			try {				
-				evaluation = ThreadedTournament.evaluate(population, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+				evaluation = ThreadedTournament.evaluate(population, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 10,
 						MAX_CYCLES, 100, visual, System.out, -1, false, false, "traces/");
 				storeData(evaluation);
 			} catch (Exception e) {
@@ -218,8 +220,9 @@ public class MultiStageGenetic {
 			List<AI> popAux = new LinkedList<>();
 			for (AI bot : population)
 				popAux.add(bot.clone());
-			evaluation = ThreadedTournament.evaluate(population, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+			evaluation = ThreadedTournament.evaluate(population, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 10,
 					MAX_CYCLES, 100, visual, System.out, -1, false, false, "traces/");
+			storeData(evaluation);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

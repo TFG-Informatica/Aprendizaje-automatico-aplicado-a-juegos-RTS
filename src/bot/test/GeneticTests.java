@@ -39,7 +39,7 @@ public class GeneticTests {
 	private static List<AI> rivals = null;
 	private static UnitTypeTable utt = null;
 	private static GameState gs = null;
-	private static final String map = "maps/8x8/basesWorkers8x8.xml";
+	private static final String map = "maps/24x24/basesWorkers24x24.xml";
 	
 	public static void main(String args[]) throws Exception{
 		

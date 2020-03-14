@@ -1,7 +1,6 @@
 package bot.run;
 
 import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.util.List;
 
@@ -25,10 +24,10 @@ public class GeneticRun {
 		GameState gs = null;
 		List<AI> result = null;
 		gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
-		MultiStageGenetic g = new MultiStageGenetic(25, 10, 10, 3, utt, gs, false);
-		g.evolutionaryAlgorithm(10);
+		MultiStageGenetic g = new MultiStageGenetic(20, 5, 20, 1, utt, gs, false);
+		g.evolutionaryAlgorithm(250);
 		result = g.getBestPopulation();
-
+  
 		OUT.println("Resultado:");
 		System.out.println("Resultado:");
 		for (int i = 0; i < result.size(); ++i) {

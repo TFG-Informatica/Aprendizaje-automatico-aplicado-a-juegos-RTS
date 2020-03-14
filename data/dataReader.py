@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import os
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-with open('Prueba.csv', 'r') as csvfile:
+with open('datosGenetico.csv', 'r') as csvfile:
     so = csv.reader(csvfile, delimiter=',')
     data = []
     for row in so:
@@ -25,7 +24,7 @@ plt.xlabel('Generación')
 plt.ylabel('Fitness')
 plt.gca().set_ylim([0, 50])
 plt.plot(np.array([[n] * np.shape(data)[1] for n in range(len(data))]).ravel(), data.ravel(), '.r')
-plt.savefig('Gráficas/Best.png')
+plt.savefig('Gráficas/Fitness.png')
 plt.show()
 
 
