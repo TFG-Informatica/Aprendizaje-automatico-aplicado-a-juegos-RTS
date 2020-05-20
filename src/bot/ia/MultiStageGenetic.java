@@ -12,6 +12,7 @@ import java.util.Random;
 import ai.RandomBiasedAI;
 import ai.abstraction.WorkerRush;
 import ai.core.AI;
+import bot.eval.Wins;
 import bot.scripts.*;
 import bot.scripts.BarrackBehavior.BarBehType;
 import bot.scripts.BaseBehavior.BaseBehType;
@@ -19,6 +20,7 @@ import bot.scripts.HeavyBehavior.HeavyBehType;
 import bot.scripts.LightBehavior.LightBehType;
 import bot.scripts.RangedBehavior.RangedBehType;
 import bot.scripts.WorkerBehavior.WorkBehType;
+import bot.tournaments.ThreadedTournament;
 import mrtsFixed.bots.*;
 import rts.GameState;
 import rts.units.UnitTypeTable;
@@ -61,7 +63,7 @@ public class MultiStageGenetic {
 				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
 				new SimpleEconomyRush(utt), new WorkerDefense(utt), /*new WorkerRush(utt),*/ new WorkerRushPlusPlus(utt));
 		
-		OUT = new PrintStream(new FileOutputStream("data/Prueba.csv"));
+		OUT = new PrintStream(new FileOutputStream("data/PruebaNew.csv"));
 	}
 	
 	public void getInitialPopulation() {
@@ -201,13 +203,20 @@ public class MultiStageGenetic {
 		getInitialPopulation();
 		while (k < maxGen) {
 			ArrayList<MultiStageGeneralScript> newPopulation = new ArrayList<MultiStageGeneralScript>();
-			try {				
-				evaluation = ThreadedTournament.evaluate(population, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 10,
-						MAX_CYCLES, 100, visual, System.out, -1, false, false, "traces/");
-				storeData(evaluation);
+			double[][] tournRes = new double[population.size()][rivals.size()];
+			try {
+				tournRes = ThreadedTournament.evaluate(population, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+						MAX_CYCLES, MAX_CYCLES, visual, new Wins(), System.out, -1, false, false, "traces/");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			for (int i = 0; i < tournRes.length; ++i) {
+				evaluation[i] = 0;
+				for (int j = 0; j < tournRes[i].length; ++j) {
+					evaluation[i] = evaluation[i] + tournRes[i][j];
+				}
+			}
+			storeData(evaluation);
 			select(newPopulation);
 			cross(newPopulation);
 			mutate(newPopulation);
@@ -216,16 +225,25 @@ public class MultiStageGenetic {
 			
 			System.out.println("Generación " + k + " de " + maxGen);			
 		} 
+
+		List<AI> popAux = new LinkedList<>();
+		for (AI bot : population)
+			popAux.add(bot.clone());
+		double[][] tournRes = new double[population.size()][rivals.size()];
 		try {
-			List<AI> popAux = new LinkedList<>();
-			for (AI bot : population)
-				popAux.add(bot.clone());
-			evaluation = ThreadedTournament.evaluate(population, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 10,
-					MAX_CYCLES, 100, visual, System.out, -1, false, false, "traces/");
-			storeData(evaluation);
+			tournRes = ThreadedTournament.evaluate(population, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+					MAX_CYCLES, MAX_CYCLES, visual, new Wins(), System.out, -1, false, false, "traces/");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		for (int i = 0; i < tournRes.length; ++i) {
+			evaluation[i] = 0;
+			for (int j = 0; j < tournRes[i].length; ++j) {
+				evaluation[i] = evaluation[i] + tournRes[i][j];
+			}
+		}
+		storeData(evaluation);
+
 		double[] evalCopy = evaluation.clone();
 		bestPopulation = new ArrayList<AI>();
 		double bestEval = -100000;

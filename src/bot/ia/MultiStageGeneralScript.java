@@ -43,12 +43,18 @@ public class MultiStageGeneralScript extends AbstractionLayerAI {
 	}
 	
 	@Override
-	public AI clone() {
+	public MultiStageGeneralScript clone() {
 		List<GeneralScript> scriptsCopy = new ArrayList<GeneralScript>();
 		for (GeneralScript gs : scripts) 
 			scriptsCopy.add(gs.clone());
 		return new MultiStageGeneralScript(getTimeBudget(), 
 											getIterationsBudget(), scriptsCopy);
+	}
+	
+	@Override
+	public void reset() {
+		for (GeneralScript gs : scripts) 
+			gs.reset();
 	}
 	
 	@Override

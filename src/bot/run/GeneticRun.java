@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.util.List;
 
 import ai.core.AI;
+import bot.ia.GeneticV2;
 import bot.ia.MultiStageGeneralScript;
 import bot.ia.MultiStageGenetic;
 import bot.io.MultiStageGeneralScriptIO;
@@ -20,12 +21,12 @@ public class GeneticRun {
 
 		OUT = new PrintStream(new FileOutputStream("data/ResultadosGenetico.txt"));
 
-		UnitTypeTable utt = new UnitTypeTable();
+		UnitTypeTable utt = new UnitTypeTable(UnitTypeTable.VERSION_ORIGINAL_FINETUNED);
 		GameState gs = null;
 		List<AI> result = null;
 		gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
-		MultiStageGenetic g = new MultiStageGenetic(20, 5, 20, 1, utt, gs, false);
-		g.evolutionaryAlgorithm(250);
+		GeneticV2 g = new GeneticV2(5, 5, 3, utt, gs, false);
+		g.evolutionaryAlgorithm(100);
 		result = g.getBestPopulation();
   
 		OUT.println("Resultado:");

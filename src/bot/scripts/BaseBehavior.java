@@ -17,7 +17,7 @@ public class BaseBehavior extends UnitBehavior {
 		baseBehType = a_baseBehType;
 	}
 	
-	public void oneWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+	public void fixWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs, int numWorker) {
 		int nworkers = 0;
         for (Unit u2 : pgs.getUnits()) {
             if (u2.getType().equals(workerType)
@@ -25,42 +25,21 @@ public class BaseBehavior extends UnitBehavior {
                 nworkers++;
             }
         }
-        if (nworkers < 1 && p.getResources() >= workerType.cost) {
+        if (nworkers < numWorker && p.getResources() >= gs.getResources() + workerType.cost) {
             gs.train(u, workerType);
+            gs.useResources(workerType.cost);
+        } else {
+        	gs.idle(u);
         }
 	}
 	
-	public void twoWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
-		int nworkers = 0;
-        for (Unit u2 : pgs.getUnits()) {
-            if (u2.getType().equals(workerType)
-                    && u2.getPlayer() == p.getID()) {
-                nworkers++;
-            }
-        }
-        if (nworkers < 2 && p.getResources() >= workerType.cost) {
+	public void rushWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+        if (p.getResources() >= gs.getResources() + workerType.cost) {
             gs.train(u, workerType);
+            gs.useResources(workerType.cost);
+        } else {
+        	gs.idle(u);
         }
-	}
-	
-	public void threeWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
-		int nworkers = 0;
-        for (Unit u2 : pgs.getUnits()) {
-            if (u2.getType().equals(workerType)
-                    && u2.getPlayer() == p.getID()) {
-                nworkers++;
-            }
-        }
-        if (nworkers < 3 && p.getResources() >= workerType.cost) {
-            gs.train(u, workerType);
-        }
-	}
-	
-	public AbstractAction rushWorker(Unit u, Player p, PhysicalGameState pgs) {
-        if (p.getResources() >= workerType.cost) {
-            return new Train(u, workerType);
-        }
-        return null;
 	}
 	
 	public BaseBehType getType() {
@@ -75,16 +54,16 @@ public class BaseBehavior extends UnitBehavior {
 	public void behavior(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		switch (baseBehType) {
 		case ONEWORKER:
-			this.oneWorker(gs, u, p, pgs);
+			this.fixWorker(gs, u, p, pgs, 1);
 			break;
 		case TWOWORKER:
-			this.twoWorker(gs, u, p, pgs);
+			this.fixWorker(gs, u, p, pgs, 2);
 			break;
 		case THREEWORKER:
-			this.threeWorker(gs, u, p, pgs);
+			this.fixWorker(gs, u, p, pgs, 3);
 			break;
 		case RUSHWORKER:
-			this.rushWorker(u, p, pgs);
+			this.rushWorker(gs, u, p, pgs);
 			break;
 		}
 	}

@@ -23,8 +23,12 @@ public class BarrackBehavior extends UnitBehavior{
                 nworkers++;
             }
         }
-        if (nworkers > 0 && p.getResources() >= lightType.cost) {
+        int reserved = (nworkers > 0) ? 0 : workerType.cost;
+        if (p.getResources() >= lightType.cost + gs.getResources() + reserved) {
             gs.train(u, lightType);
+            gs.useResources(lightType.cost);
+        } else {
+        	gs.idle(u);
         }
 	}
 	
@@ -36,8 +40,12 @@ public class BarrackBehavior extends UnitBehavior{
                 nworkers++;
             }
         }
-        if (nworkers > 0 && p.getResources() >= heavyType.cost) {
+        int reserved = (nworkers > 0) ? 0 : workerType.cost;
+        if (p.getResources() >= heavyType.cost + gs.getResources() + reserved) {
             gs.train(u, heavyType);
+            gs.useResources(heavyType.cost);
+        } else {
+        	gs.idle(u);
         }
 	}
 	
@@ -49,8 +57,12 @@ public class BarrackBehavior extends UnitBehavior{
                 nworkers++;
             }
         }
-        if (nworkers > 0 && p.getResources() >= rangedType.cost) {
+        int reserved = (nworkers > 0) ? 0 : workerType.cost;
+        if (p.getResources() >= rangedType.cost + gs.getResources() + reserved) {
             gs.train(u, rangedType);
+            gs.useResources(rangedType.cost);
+        } else {
+        	gs.idle(u);
         }
 	}
 	
@@ -71,14 +83,19 @@ public class BarrackBehavior extends UnitBehavior{
                 nrangeds++;
             }
         }
-        if (nworkers > 0) {
-			if (nlights <= nheavys && nlights <= nrangeds && p.getResources() >= lightType.cost)
-				gs.train(u, lightType);
-			else if (nheavys <= nlights && nheavys <= nrangeds && p.getResources() >= heavyType.cost)
-				gs.train(u, heavyType);
-			else if (p.getResources() >= rangedType.cost)
-				gs.train(u, rangedType);
-		}
+        int reserved = (nworkers > 0) ? 0 : workerType.cost;
+        if (nlights <= nheavys && nlights <= nrangeds && p.getResources() >= lightType.cost + gs.getResources() + reserved) {
+        	gs.train(u, lightType);
+        	gs.useResources(lightType.cost);
+        } else if (nheavys <= nlights && nheavys <= nrangeds && p.getResources() >= heavyType.cost + gs.getResources() + reserved) {
+        	gs.train(u, heavyType);
+        	gs.useResources(heavyType.cost);
+        } else if (p.getResources() >= rangedType.cost + gs.getResources() + reserved) {
+        	gs.train(u, rangedType);
+        	gs.useResources(rangedType.cost);
+        } else {
+        	gs.idle(u);
+        }
 	}
 	
 	public BarBehType getType() {

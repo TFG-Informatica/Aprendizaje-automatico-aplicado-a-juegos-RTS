@@ -8,6 +8,7 @@ import java.util.Random;
 
 import ai.abstraction.pathfinding.PathFinding;
 import ai.core.AI;
+import bot.eval.Wins;
 import bot.scripts.*;
 import bot.scripts.BarrackBehavior.BarBehType;
 import bot.scripts.BaseBehavior.BaseBehType;
@@ -15,6 +16,7 @@ import bot.scripts.HeavyBehavior.HeavyBehType;
 import bot.scripts.LightBehavior.LightBehType;
 import bot.scripts.RangedBehavior.RangedBehType;
 import bot.scripts.WorkerBehavior.WorkBehType;
+import bot.tournaments.ThreadedTournament;
 import rts.GameState;
 import rts.units.UnitTypeTable;
 
@@ -167,32 +169,48 @@ public class Genetic {
 		getInitialPopulation();
 		while (k < maxGen) {
 			ArrayList<GeneralScript> newPopulation = new ArrayList<GeneralScript>();
+			List<AI> popAux = new LinkedList<>();
+			for (AI bot : population)
+				popAux.add(bot.clone());
+			double[][] tournRes = new double[population.size()][popAux.size()];
 			try {
-				List<AI> popAux = new LinkedList<>();
-				for (AI bot : population)
-					popAux.add(bot.clone());
-				evaluation = ThreadedTournament.evaluate(population, popAux, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-						2000, 100, visual, System.out, -1, false, false, "traces/");
+				tournRes = ThreadedTournament.evaluate(population, popAux, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+						2000, 100, visual, new Wins(), System.out, -1, false, false, "traces/");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			for (int i = 0; i < tournRes.length; ++i) {
+				evaluation[i] = 0;
+				for (int j = 0; j < tournRes[i].length; ++j) {
+					evaluation[i] = evaluation[i] + tournRes[i][j];
+				}
+			}
+
 			select(newPopulation);
 			cross(newPopulation);
 			mutate(newPopulation);
 			elite(newPopulation);
 			++k;
-			
+
 			System.out.println("Generación " + k + " de " + maxGen);
 		} 
+		List<AI> popAux = new LinkedList<>();
+		for (AI bot : population)
+			popAux.add(bot.clone());
+		double[][] tournRes = new double[population.size()][popAux.size()];
 		try {
-			List<AI> popAux = new LinkedList<>();
-			for (AI bot : population)
-				popAux.add(bot.clone());
-			evaluation = ThreadedTournament.evaluate(population, popAux, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-					2000, 100, visual, System.out, -1, false, false, "traces/");
+			tournRes = ThreadedTournament.evaluate(population, popAux, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+					2000, 100, visual, new Wins(), System.out, -1, false, false, "traces/");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		for (int i = 0; i < tournRes.length; ++i) {
+			evaluation[i] = 0;
+			for (int j = 0; j < tournRes[i].length; ++j) {
+				evaluation[i] = evaluation[i] + tournRes[i][j];
+			}
+		}
+
 		double[] evalCopy = evaluation.clone();
 		bestPopulation = new ArrayList<AI>();
 		double bestEval = -100000;

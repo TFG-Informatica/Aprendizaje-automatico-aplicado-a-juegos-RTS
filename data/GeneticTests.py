@@ -4,22 +4,34 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
-data = pd.read_csv("GeneticTests24x24.csv")
+data = pd.read_csv("All8x8.csv")
 
-d = {'HARVESTER': data[data.WorkBeh == 'HARVESTER']['FitTot'], 
-     'AGGRESSIVE': data[data.WorkBeh == 'AGGRESSIVE']['FitTot']}
-df = pd.DataFrame(data=d)
-df.boxplot(column=['HARVESTER', 'AGGRESSIVE'], figsize=(10,10))
-plt.savefig("Gráficas/BigotesHarvAggr24x24.png")
+colors = ['#BD190E', '#C6870B', '#71AF06', '#0D8915', '#14A8D5', '#071CD7', '#6E1CDA', '#CD16B4']
+sns.set_style("whitegrid")
+sns.set_palette(sns.color_palette(colors))
 
-plt.figure(figsize=(10,10))
-plt.scatter(range(len(df)), df['HARVESTER'], marker='o', c='blue', label='Harvester')
-plt.scatter(range(len(df)), df['AGGRESSIVE'], marker='o', c='red', label='Aggresive')
-plt.title("Fitness total según si son harvester o aggresive")
-plt.xlabel("Bot")
-plt.ylabel("Fitness")
-plt.legend(loc="lower right")
-plt.savefig("Gráficas/FitnessHarvAggr24x24.png")
-plt.show()
+for i in range(6):
+    plt.figure(figsize=(10,10))    
+    if (data.columns.values[i] == 'LightBeh'):
+        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data[data.BarBeh=='LIGHT'], width=.3, linewidth=3)
+    elif (data.columns.values[i] == 'HeavyBeh'):
+        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data[data.BarBeh=='HEAVY'], width=.3, linewidth=3)
+    elif (data.columns.values[i] == 'RangedBeh'):
+        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data[data.BarBeh=='RANGED'], width=.3, linewidth=3)
+    else:
+        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data, width=.3, linewidth=3)
+    for j,patch in enumerate(ax.artists):
+        r, g, b, a = patch.get_facecolor()
+        patch.set_facecolor((r, g, b, .5))
+        patch.set_edgecolor(colors[j])    
+        for k in range(j*6,j*6+6):
+            line = ax.lines[k]
+            line.set_color(colors[j])
+            line.set_mfc(colors[j])
+            line.set_mec(colors[j])
+    plt.title("Fitness obtenido según la variable " + data.columns.values[i], x=0.5, y=1.025)
+    plt.savefig(data.columns.values[i] + "All8x8.png")
+    
