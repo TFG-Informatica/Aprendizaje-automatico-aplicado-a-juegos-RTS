@@ -14,7 +14,7 @@ import util.Pair;
 
 public class WorkerBehavior extends UnitBehavior {
 
-	public enum WorkBehType{HARVESTER, AGGRESSIVE, ONEHARVAGGR, TWOHARVAGGR, THREEHARVAGGR};
+	public enum WorkBehType{HARVESTER, AGGRESSIVE, ONEHARVAGGR, TWOHARVAGGR, THREEHARVAGGR, ONEHARVNOBAR, TWOHARVNOBAR, THREEHARVNOBAR};
 	private WorkBehType workBehType;
 	
 	private ArrayList<Pair<Integer,Integer>> obst;
@@ -202,14 +202,18 @@ public class WorkerBehavior extends UnitBehavior {
         }
 		
 	}
-	
-	public void aggressiveWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
-		int nbases = 0;
+
+	public void aggressiveWorker(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs, int harv) {
+		int nbases = 0, harvesting = 0;
 
         for (Unit u2 : pgs.getUnits()) {
             if (u2.getType().equals(baseType)
                     && u2.getPlayer() == p.getID()) {
                 ++nbases;
+            }
+            if (u2.getType().equals(workerType) && !u2.equals(u)
+            		&& u2.getPlayer() == p.getID() && gs.getAbstractAction(u2) instanceof Harvest) {
+            	++harvesting;
             }
         }
         
@@ -221,7 +225,7 @@ public class WorkerBehavior extends UnitBehavior {
             gs.buildIfNotAlreadyBuilding(u,baseType,u.getX(),u.getY(),reservedPositions,p,pgs);
             ++buildingBase;
             gs.useResources(baseType.cost);
-        } else if ((nbases == 0 && buildingBase == 0)) {
+        } else if ((nbases == 0 && buildingBase == 0) || harvesting < harv) {
             // harvest resources for building a base:
         	Unit closestBase = null;
             Unit closestResource = null;
@@ -315,7 +319,16 @@ public class WorkerBehavior extends UnitBehavior {
 	public void behavior(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		switch (workBehType) {
 		case AGGRESSIVE:
-			aggressiveWorker(gs, u, p, pgs);
+			aggressiveWorker(gs, u, p, pgs, 0);
+			break;
+		case ONEHARVNOBAR:
+			aggressiveWorker(gs, u, p, pgs, 1);
+			break;
+		case TWOHARVNOBAR:
+			aggressiveWorker(gs, u, p, pgs, 2);
+			break;
+		case THREEHARVNOBAR:
+			aggressiveWorker(gs, u, p, pgs, 3);
 			break;
 		case HARVESTER:
 			harvesterWorker(gs, u, p, pgs);
