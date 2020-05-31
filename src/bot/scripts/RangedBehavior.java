@@ -12,7 +12,7 @@ import util.Pair;
 
 public class RangedBehavior extends UnitBehavior {
 
-	public enum RangedBehType{LESSHP,LESSPERCHP,CLOSEST,CLOSESTDIRECT,WAIT,CLOSBUIL};
+	public enum RangedBehType{LESSHP,LESSPERCHP,KITE,CLOSEST,WAIT,CLOSBUIL};
 	private RangedBehType rangedBehType;
 
 	public RangedBehavior(UnitTypeTable a_utt, RangedBehType a_rangedBehType) {
@@ -82,7 +82,7 @@ public class RangedBehavior extends UnitBehavior {
         }
 	}
 	
-	public void closestAttack(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+	public void kiteAttack(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		Unit closestEnemy = null;
         int closestDistance = 0;
         for (Unit u2 : pgs.getUnits()) {
@@ -99,7 +99,7 @@ public class RangedBehavior extends UnitBehavior {
         }
 	}
 	
-	public void closestDirectAttack(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
+	public void closestAttack(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		Unit closestEnemy = null;
         int closestDistance = 0;
         for (Unit u2 : pgs.getUnits()) {
@@ -201,8 +201,8 @@ public class RangedBehavior extends UnitBehavior {
 	@Override
 	public void behavior(GeneralScript gs, Unit u, Player p, PhysicalGameState pgs) {
 		switch (rangedBehType) {
-		case CLOSEST:
-			closestAttack(gs, u, p, pgs);
+		case KITE:
+			kiteAttack(gs, u, p, pgs);
 			break;
 		case LESSHP:
 			lessHPAttack(gs, u, p, pgs);
@@ -210,8 +210,8 @@ public class RangedBehavior extends UnitBehavior {
 		case LESSPERCHP:
 			lessPercHPAttack(gs, u, p, pgs);
 			break;
-		case CLOSESTDIRECT:
-			closestDirectAttack(gs, u, p, pgs);
+		case CLOSEST:
+			closestAttack(gs, u, p, pgs);
 			break;
 		case WAIT:
 			wait(gs, u, p, pgs);

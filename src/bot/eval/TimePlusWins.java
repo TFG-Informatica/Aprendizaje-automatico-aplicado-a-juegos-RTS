@@ -2,13 +2,13 @@ package bot.eval;
 
 import rts.GameState;
 
-public class Time implements EvalFunc {
+public class TimePlusWins implements EvalFunc{
 
 	int mid;
 	int CURV = 5;
 	double LIM = 0.45;
 	
-	public Time (int max) {
+	public TimePlusWins (int max) {
 		mid = max / 2;
 	}
 	
@@ -19,7 +19,7 @@ public class Time implements EvalFunc {
 		if (gs.winner() != player)
 			return LIM / (1 + Math.exp(-CURV*(time-mid)/mid));
 		else
-			return LIM / (1 + Math.exp(CURV*(time-mid)/mid)) + (1-LIM);
+			return 1000 + LIM / (1 + Math.exp(CURV*(time-mid)/mid)) + (1-LIM);
 	}
-
+	
 }

@@ -66,7 +66,7 @@ public class WorkerBehavior extends UnitBehavior {
             // look for a good spot:
         	Pair<Integer, Integer> pos = getGoodCoords(new Pair<Integer,Integer>(u.getX(), u.getY()), pgs.getWidth(), pgs.getHeight());
         	// build a barracks:
-            gs.buildIfNotAlreadyBuilding(u,barracksType,pos.m_a,pos.m_b,reservedPositions,p,pgs);
+            gs.buildIfNotAlreadyBuilding(u,barracksType,pos.m_a+1,pos.m_b+1,reservedPositions,p,pgs);
             ++buildingBarracks;
             gs.useResources(barracksType.cost);
         } else {
@@ -147,7 +147,7 @@ public class WorkerBehavior extends UnitBehavior {
         	// look for a good spot:
         	Pair<Integer, Integer> pos = getGoodCoords(new Pair<Integer,Integer>(u.getX(), u.getY()), pgs.getWidth(), pgs.getHeight());
         	// build a barracks:
-            gs.buildIfNotAlreadyBuilding(u,barracksType,pos.m_a,pos.m_b,reservedPositions,p,pgs);
+            gs.buildIfNotAlreadyBuilding(u,barracksType,pos.m_a+1,pos.m_b+1,reservedPositions,p,pgs);
             ++buildingBarracks;
             gs.useResources(barracksType.cost);
         } else if ((nbases == 0 && buildingBase == 0) || (nbarracks == 0 && buildingBarracks == 0) || harvesting < harv) {

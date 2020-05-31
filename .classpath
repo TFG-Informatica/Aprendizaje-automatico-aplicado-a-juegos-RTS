@@ -8,5 +8,7 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/microrts"/>
 	<classpathentry kind="lib" path="/microrts/lib/jdom.jar"/>
+	<classpathentry kind="src" path="/TiamatBot"/>
+	<classpathentry kind="src" path="/Droplet"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

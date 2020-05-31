@@ -23,7 +23,7 @@ public class GeneticRun {
 		GameState gs = null;
 		List<AI> result = null;
 		gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
-		ParamGenetic g = new ParamGenetic(5, 5, 3, utt, gs, false);
+		ParamGenetic g = new ParamGenetic(20, 5, 3, utt, gs, false);
 		g.evolutionaryAlgorithm(100);
 		result = g.getBestPopulation();
   

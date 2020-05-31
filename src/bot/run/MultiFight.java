@@ -1,6 +1,5 @@
 package bot.run;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -9,14 +8,9 @@ import java.util.List;
 import java.util.Scanner;
 
 import ai.RandomBiasedAI;
-import ai.abstraction.*;
-import ai.abstraction.pathfinding.AStarPathFinding;
 import ai.core.AI;
 import bot.eval.Wins;
-import bot.ia.DFSTreeAI;
-import bot.ia.Genetic;
 import bot.ia.MultiStageGeneralScript;
-import bot.io.MultiStageGeneralScriptIO;
 import bot.scripts.GeneralScript;
 import bot.scripts.BarrackBehavior.BarBehType;
 import bot.scripts.BaseBehavior.BaseBehType;
@@ -61,9 +55,9 @@ public class MultiFight {
 				new GeneralScript(utt, BaseBehType.TWOWORKER, BarBehType.RANGED, WorkBehType.HARVESTER,
 						LightBehType.WAIT, HeavyBehType.WAIT, RangedBehType.WAIT),
 				new GeneralScript(utt, BaseBehType.TWOWORKER, BarBehType.LIGHT, WorkBehType.HARVESTER,
-						LightBehType.CLOSEST, HeavyBehType.WAIT, RangedBehType.CLOSESTDIRECT),
+						LightBehType.CLOSEST, HeavyBehType.WAIT, RangedBehType.CLOSEST),
 				new GeneralScript(utt, BaseBehType.RUSHWORKER, BarBehType.LIGHT, WorkBehType.ONEHARVAGGR,
-						LightBehType.CLOSEST, HeavyBehType.CLOSBUIL, RangedBehType.CLOSESTDIRECT)))));
+						LightBehType.CLOSEST, HeavyBehType.CLOSBUIL, RangedBehType.CLOSEST)))));
 		
 		/*for (int i = 0; i < 10; ++i) {
 			IN = new Scanner(new File("serial/Bot" + i + ".txt"));

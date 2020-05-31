@@ -10,9 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import GNS.Droplet;
 import ai.RandomBiasedAI;
 import ai.abstraction.AbstractionLayerAI;
 import ai.abstraction.pathfinding.PathFinding;
+import ai.competition.tiamat.Tiamat;
 import ai.core.AI;
 import ai.core.ParameterSpecification;
 import bot.scripts.GeneralScript;
@@ -45,11 +47,15 @@ import rts.units.UnitTypeTable;
 public class GeneticV2 {
 	
 	private PrintStream OUT = null;
+	private PrintStream TOUT = null;
 	
-	private final int TOURNSIZE = 3;
-	private final double MUT_CHANCE = 0.1;
+	private final int TOURNSIZE = 1;
+	private final double MUT_CHANCE = 0.3;
 	private final int MUT_TIMES = 3;
 	private final int MAX_CYCLES = 3000;
+	private final int REQ_DIFF = 12;
+	private final int NUM_MATCH = 2;
+	
 	
 	private GameState gs;
 	private UnitTypeTable utt;
@@ -76,17 +82,19 @@ public class GeneticV2 {
 		allEval = new HashMap<MultiStageGeneralScript,Double>();
 		population = new ArrayList<MultiStageGeneralScript>();
 		bestPopulation = new ArrayList<MultiStageGeneralScript>();
-		rivals = Arrays.asList(new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
+		/*rivals = Arrays.asList(new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
 				new EMRDeterministico(utt), new HeavyDefense(utt), new HeavyRush(utt), new LightDefense(utt),
 				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
-				new SimpleEconomyRush(utt), new WorkerDefense(utt), /*new WorkerRush(utt),*/ new WorkerRushPlusPlus(utt));
+				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt));*/
+		rivals = Arrays.asList(new Droplet(utt));
 		
-		OUT = new PrintStream(new FileOutputStream("data/exp.csv"));
+		OUT = new PrintStream(new FileOutputStream("data/exp2.csv"));
+		TOUT = new PrintStream(new FileOutputStream("data/dropletVSself.csv"));
 	}
 	
 	public void getInitialPopulation() {
 		Random r = new Random();
-		for (int i = 0; i < popSize; ++i) {
+		while(population.size() < popSize) {
 			List<GeneralScript> scripts = new ArrayList<GeneralScript>();
 			for (int j = 0; j < phases; ++j) {
 				BaseBehType baseBehType = BaseBehType.values()[r.nextInt(BaseBehType.values().length)];
@@ -98,10 +106,12 @@ public class GeneticV2 {
 				scripts.add(new GeneralScript(utt, baseBehType, barBehType, 
 						workBehType, lightBehType, heavyBehType, rangedBehType));
 			}
-			population.add(new MultiStageGeneralScript(scripts));
+			MultiStageGeneralScript newElem = new MultiStageGeneralScript(scripts);
+			if (checkDiff(newElem, population) >= REQ_DIFF)
+				population.add(newElem);
 		}
 	}
-	
+
 	public void select(ArrayList<MultiStageGeneralScript> parents) {
 		Random r = new Random();
 		for (int i = 0; i < popSize; ++i) {
@@ -122,7 +132,8 @@ public class GeneticV2 {
 	 */
 	public void cross(ArrayList<MultiStageGeneralScript> parents, ArrayList<MultiStageGeneralScript> children) {
 		Random r = new Random();
-		while (children.size() < parents.size()) {
+		int nPar = parents.size();
+		while (parents.size() >= 2 && children.size() < nPar) {
 			int p1 = r.nextInt(parents.size());
 			MultiStageGeneralScript e1 = parents.remove(p1);
 			int p2 = r.nextInt(parents.size());
@@ -202,7 +213,7 @@ public class GeneticV2 {
 		}
 	}
 	
-	public double[] fitness(List<MultiStageGeneralScript> population2) throws Exception {
+	/*public double[] fitness(List<MultiStageGeneralScript> population2) throws Exception {
 		double[] evaluation = new double[population2.size()];
 		List<AI> unknowns = new ArrayList<AI>();
 		for (int i = 0; i < population2.size(); ++i) {
@@ -215,7 +226,7 @@ public class GeneticV2 {
 			}
 		}
 		
-		double[][] tournRes = ThreadedTournament.evaluate(unknowns, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+		double[][] tournRes = ThreadedTournament.evaluate(unknowns, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, NUM_MATCH,
 				MAX_CYCLES, MAX_CYCLES, visual, new Time(), System.out, -1, false, false, "traces/");
 		
 		int j = 0;
@@ -230,6 +241,25 @@ public class GeneticV2 {
 		}
 		
 		return evaluation;
+	}*/
+	
+	public double[] fitness(List<MultiStageGeneralScript> population2) throws Exception {
+		double[] evaluation = new double[population2.size()];
+		List<AI> unknowns = new ArrayList<AI>();
+		for (int i = 0; i < population2.size(); ++i) {
+			unknowns.add(population2.get(i));
+		}
+		
+		double[][] tournRes = ThreadedTournament.evaluate(unknowns, unknowns, Arrays.asList(gs.getPhysicalGameState()), utt, NUM_MATCH,
+				MAX_CYCLES, MAX_CYCLES, visual, new Time(), System.out, -1, false, false, "traces/");
+		
+		for (int i = 0; i < evaluation.length; ++i) {
+			evaluation[i] = 0;
+			for (double d : tournRes[i])
+				evaluation[i] += d;
+		}
+		
+		return evaluation;
 	}
 	
 	public void evolutionaryAlgorithm(int maxGen) throws Exception {
@@ -240,6 +270,7 @@ public class GeneticV2 {
 		
 		while (k < maxGen) {
 			storeData(evaluation);
+			testDroplet();
 			
 			ArrayList<MultiStageGeneralScript> bag = new ArrayList<MultiStageGeneralScript>();
 			for (MultiStageGeneralScript a : population)
@@ -266,9 +297,19 @@ public class GeneticV2 {
 			double[] bagEvaluation = fitness(bag);
 			for (int i = 0; i < popSize; ++i) {
 				int bestInd = 0;
-				for (int j = 1; j < bagEvaluation.length; ++j) {
-					if (bagEvaluation[bestInd] < bagEvaluation[j])
-						bestInd = j;
+				while (bestInd < bagEvaluation.length && checkDiff(bag.get(bestInd), population) < REQ_DIFF) ++bestInd;
+				if (bestInd != bagEvaluation.length) {
+					for (int j = bestInd + 1; j < bagEvaluation.length; ++j) {
+						if (bagEvaluation[bestInd] < bagEvaluation[j] && checkDiff(bag.get(j), population) >= REQ_DIFF)
+							bestInd = j;
+					}
+				}
+				else {
+					bestInd = 0;
+					for (int j = 1; j < bagEvaluation.length; ++j) {
+						if (bagEvaluation[bestInd] < bagEvaluation[j])
+							bestInd = j;
+					}
 				}
 				population.add(bag.get(bestInd));
 				evaluation[i] = bagEvaluation[bestInd];
@@ -288,6 +329,31 @@ public class GeneticV2 {
 		}
 	}
 	
+	public int difference(MultiStageGeneralScript a1, MultiStageGeneralScript a2) {
+		int diff = 0;
+		List<GeneralScript> scripts1 = a1.getScripts();
+		List<GeneralScript> scripts2 = a2.getScripts();
+		for (int i = 0; i < scripts1.size(); ++i) {
+			List<String> script1 = scripts1.get(i).getBehaviorTypes();
+			List<String> script2 = scripts2.get(i).getBehaviorTypes();
+			for (int j = 0; j < script1.size(); ++j) {
+				if (!script1.get(j).equals(script2.get(j)))
+					++diff;
+			}
+		}
+		return diff;
+	}
+	
+	private int checkDiff(MultiStageGeneralScript newElem, List<MultiStageGeneralScript> elems) {
+		int diffTot = 10000;
+		for (MultiStageGeneralScript a : elems) {
+			int diff = difference(newElem, a);
+			if (diff < diffTot)
+				diffTot = diff;
+		}
+		return diffTot;
+	}
+	
 	public List<AI> getBestPopulation() {
 		List<AI> aux = new ArrayList<>();
 		for (AI bot : bestPopulation)
@@ -300,5 +366,22 @@ public class GeneticV2 {
 		for (int i = 1; i < data.length; ++i)
 			OUT.print("," + data[i]);
 		OUT.print("\n");
+	}
+	
+	public void testDroplet() throws Exception {
+		List<AI> bots = new ArrayList<AI>();
+		for (int i = 0; i < population.size(); ++i) {
+			bots.add(population.get(i));
+		}
+		List<AI> drop = new ArrayList<AI>(Arrays.asList(new Droplet(utt)));
+		
+		double[][] tournRes = ThreadedTournament.evaluate(bots, drop, Arrays.asList(gs.getPhysicalGameState()), utt, NUM_MATCH,
+				MAX_CYCLES, MAX_CYCLES, visual, new Time(), System.out, -1, false, false, "traces/");
+		
+		TOUT.print(tournRes[0][0]);
+		for (int i = 1; i < tournRes.length; ++i) {
+			TOUT.print("," + tournRes[i][0]);
+		}
+		TOUT.print("\n");
 	}
 }

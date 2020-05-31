@@ -75,7 +75,7 @@ public class GeneticMultiStageTests {
 
 		bestGS.add(new ArrayList<AI>(Arrays.asList(
 				new GeneralScript(utt, BaseBehType.RUSHWORKER, BarBehType.LIGHT, WorkBehType.TWOHARVAGGR,
-						LightBehType.CLOSBUIL, HeavyBehType.CLOSEST, RangedBehType.CLOSESTDIRECT),
+						LightBehType.CLOSBUIL, HeavyBehType.CLOSEST, RangedBehType.CLOSEST),
 				new GeneralScript(utt, BaseBehType.RUSHWORKER, BarBehType.LESS, WorkBehType.THREEHARVAGGR,
 						LightBehType.CLOSBUIL, HeavyBehType.LESSPERCHP, RangedBehType.WAIT),
 				new GeneralScript(utt, BaseBehType.RUSHWORKER, BarBehType.LIGHT, WorkBehType.TWOHARVAGGR,

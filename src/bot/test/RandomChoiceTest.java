@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+import GNS.Droplet;
 import ai.RandomBiasedAI;
 import ai.core.AI;
 import bot.eval.Time;
@@ -40,7 +41,7 @@ import rts.units.UnitTypeTable;
 
 public class RandomChoiceTest {
 	
-	private static UnitTypeTable utt = new UnitTypeTable();
+	private static UnitTypeTable utt = new UnitTypeTable(UnitTypeTable.VERSION_ORIGINAL_FINETUNED);
 	private static GameState gs; 
 	private static int MAX_CYCLES = 3000;
 	private static boolean visual = false;
@@ -60,7 +61,7 @@ public class RandomChoiceTest {
 		rivals = Arrays.asList(new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
 				new EMRDeterministico(utt), new HeavyDefense(utt), new HeavyRush(utt), new LightDefense(utt),
 				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
-				new SimpleEconomyRush(utt), new WorkerDefense(utt), /*new WorkerRush(utt),*/ new WorkerRushPlusPlus(utt));
+				new SimpleEconomyRush(utt), new WorkerDefense(utt), /*new WorkerRush(utt),*/ new WorkerRushPlusPlus(utt), new Droplet(utt));
 		
 		ArrayList<AI> population = new ArrayList<AI>();
 		Random r = new Random();
@@ -86,7 +87,7 @@ public class RandomChoiceTest {
 	public static double[] fitness(List<AI> population) throws Exception {
 		double[] evaluation = new double[population.size()];
 		
-		double[][] tournRes = ThreadedTournament.evaluate(population, population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+		double[][] tournRes = ThreadedTournament.evaluate(population, population, Arrays.asList(gs.getPhysicalGameState()), utt, 2,
 				MAX_CYCLES, MAX_CYCLES, visual, new Wins(), System.out, -1, false, false, "traces/");
 		
 		for (int i = 0; i < evaluation.length; ++i) {

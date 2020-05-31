@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import GNS.Droplet;
 import ai.RandomBiasedAI;
 import ai.core.AI;
 import bot.scripts.GeneralScript;
+import bot.eval.Time;
+import bot.eval.TimePlusWins;
 import bot.eval.Wins;
 import bot.scripts.BarrackBehavior.BarBehType;
 import bot.scripts.BaseBehavior.BaseBehType;
@@ -59,15 +62,15 @@ public class GeneticTests {
 		rivals = Arrays.asList(new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
 				new EMRDeterministico(utt), new HeavyDefense(utt), new HeavyRush(utt), new LightDefense(utt),
 				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
-				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt));
+				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt), new Droplet(utt));
 		
-		PrintStream OUT = new PrintStream(new FileOutputStream("data/All8x8.csv"));
+		PrintStream OUT = new PrintStream(new FileOutputStream("data/All8x8FinalMagic.csv"));
 		
 		OUT.println("BaseBeh,BarBeh,WorkBeh,LightBeh,HeavyBeh,RangedBeh,Fit01,Fit02,Fit03,Fit04,Fit05,"
-				+ "Fit06,Fit07,Fit08,Fit09,Fit10,Fit11,Fit12,Fit13,Fit14,FitTot");
+				+ "Fit06,Fit07,Fit08,Fit09,Fit10,Fit11,Fit12,Fit13,Fit14,Fit15,FitTot");
 		
 		double res[][] = ThreadedTournament.evaluate(allGS, rivals, Arrays.asList(gs.getPhysicalGameState()), 
-											utt, 1, 2000, 2000, false, new Wins(), System.out, -1, false, false, "traces/");
+											utt, 2, 3000, 3000, false, new TimePlusWins(3000), System.out, -1, false, false, "traces/");
 		
 		for(int i = 0; i < allGS.size(); ++i) {
 			for(String s : ((GeneralScript) allGS.get(i)).getBehaviorTypes())

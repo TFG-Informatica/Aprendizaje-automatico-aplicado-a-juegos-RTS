@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ai.abstraction.AbstractAction;
 import ai.abstraction.AbstractionLayerAI;
+import ai.abstraction.Build;
 import ai.abstraction.Move;
 import ai.abstraction.pathfinding.AStarPathFinding;
 import ai.core.ParameterSpecification;
@@ -88,16 +90,29 @@ public class GeneralScript extends AbstractionLayerAI {
 			
 			if(waitX == -1 && waitY == -1) {
 				waitX = x; waitY = y;
-				for (int i = 5; i > 0; --i) {
-					if (waitX + i < free.length && free[waitX + i][waitY]) {
-						waitX += i; break;
-					} else if (waitY + i < free[waitX].length && free[waitX][waitY + i]) {
-						waitY += i; break;
-					} else if (waitX - i >= 0 && free[waitX - i][waitY]) {
-						waitX -= i; break;
-					} else if (waitY - i >= 0 && free[waitX][waitY - i]) {
-						waitY -= i; break;
-					} 
+				if(x < pgs.getWidth() / 2) {
+					for (int i = 5; i > 0; --i) {
+						if (waitX + i < free.length && free[waitX + i][waitY]) {
+							waitX += i; break;
+						} else if (waitY + i < free[waitX].length && free[waitX][waitY + i]) {
+							waitY += i; break;
+						} else if (waitX - i >= 0 && free[waitX - i][waitY]) {
+							waitX -= i; break;
+						} else if (waitY - i >= 0 && free[waitX][waitY - i]) {
+							waitY -= i; break;
+						} 
+					}
+				} else {
+					for (int i = 5; i > 0; --i) {
+						if (waitX - i >= 0 && free[waitX - i][waitY]) {
+							waitX -= i; break;
+						} else if (waitY - i >= 0 && free[waitX][waitY - i]) {
+							waitY -= i; break;
+						} else if (waitX + i < free.length && free[waitX + i][waitY]) {
+							waitX += i; break;
+						} else if (waitY + i < free[waitX].length && free[waitX][waitY + i]) {
+							waitY += i; break;
+						} 					}
 				}
 			}
 			
@@ -253,13 +268,13 @@ public class GeneralScript extends AbstractionLayerAI {
             	int dx = u2.getX()-u.getX();
                 int dy = u2.getY()-u.getY();
                 double d = Math.sqrt(dx*dx+dy*dy);
-                if (d <= u.getAttackRange()) {
+                if (d <= u.getAttackRange() + 2) {
                     attack(u, u2);
                 }
             }
         }
 	}
-
+	
 	@Override
 	public GeneralScript clone() {
 		return new GeneralScript(utt, getTimeBudget(), getIterationsBudget(), baseBehType, 
@@ -296,4 +311,42 @@ public class GeneralScript extends AbstractionLayerAI {
 		return null;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + barBehType.ordinal();
+		result = prime * result + baseBehType.ordinal();
+		result = prime * result + heavyBehType.ordinal();
+		result = prime * result + lightBehType.ordinal();
+		result = prime * result + rangeBehType.ordinal();
+		result = prime * result + workBehType.ordinal();
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GeneralScript other = (GeneralScript) obj;
+		if (barBehType != other.barBehType)
+			return false;
+		if (baseBehType != other.baseBehType)
+			return false;
+		if (heavyBehType != other.heavyBehType)
+			return false;
+		if (lightBehType != other.lightBehType)
+			return false;
+		if (rangeBehType != other.rangeBehType)
+			return false;
+		if (workBehType != other.workBehType)
+			return false;
+		return true;
+	}
+
+	
 }

@@ -40,7 +40,7 @@ import rts.units.UnitTypeTable;
 
 public class RandomChoiceTest {
 	
-	private static UnitTypeTable utt = new UnitTypeTable();
+	private static UnitTypeTable utt = new UnitTypeTable(UnitTypeTable.VERSION_ORIGINAL_FINETUNED);
 	private static GameState gs; 
 	private static int MAX_CYCLES = 3000;
 	private static boolean visual = false;
@@ -93,7 +93,7 @@ public class RandomChoiceTest {
 	public static double[] fitness(List<AI> population) throws Exception {
 		double[] evaluation = new double[population.size()];
 		
-		double[][] tournRes = ThreadedTournament.evaluate(population, population, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
+		double[][] tournRes = ThreadedTournament.evaluate(population, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
 				MAX_CYCLES, MAX_CYCLES, visual, new Wins(), System.out, -1, false, false, "traces/");
 		
 		for (int i = 0; i < evaluation.length; ++i) {

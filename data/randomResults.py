@@ -18,6 +18,6 @@ std = np.std(data)
 
 print("Máximo:", best, "Mínimo:", worst, "Media:", mean, "Desv.tip:", std);
 
-rangos = np.arange(0,101,10);
+rangos = np.arange(0,15,2);
 for i in range(len(rangos)-1):
     print("Entre " + str(rangos[i]) + " y " + str(rangos[i+1]) + ":", np.count_nonzero((data > rangos[i]) & (data <= rangos[i+1])))

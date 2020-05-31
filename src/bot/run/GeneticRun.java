@@ -25,8 +25,8 @@ public class GeneticRun {
 		GameState gs = null;
 		List<AI> result = null;
 		gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
-		GeneticV2 g = new GeneticV2(5, 5, 3, utt, gs, false);
-		g.evolutionaryAlgorithm(100);
+		GeneticV2 g = new GeneticV2(6, 6, 5, utt, gs, false);
+		g.evolutionaryAlgorithm(10);
 		result = g.getBestPopulation();
   
 		OUT.println("Resultado:");

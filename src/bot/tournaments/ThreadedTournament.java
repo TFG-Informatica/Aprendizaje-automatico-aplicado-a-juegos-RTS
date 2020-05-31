@@ -36,11 +36,12 @@ public class ThreadedTournament {
 		private double[][] punct; 
 		private Semaphore punctSem;
 		private EvalFunc eval;
+		private int player;
 		
 		public Game(int a_ai1_idx, int a_ai2_idx, AI a_ai1, AI a_ai2, boolean a_visualize,
 					PhysicalGameState a_pgs, UnitTypeTable a_utt, boolean a_partiallyObservable,
 					int a_max_cycles, int a_max_inactive_cycles, double[][] a_punct, Semaphore a_punctSem,
-					EvalFunc a_eval) {
+					EvalFunc a_eval, int a_player) {
 			ai1_idx = a_ai1_idx;
 			ai2_idx = a_ai2_idx;
 			ai1 = a_ai1;
@@ -54,6 +55,7 @@ public class ThreadedTournament {
 			punct = a_punct;
 			punctSem = a_punctSem;
 			eval = a_eval;
+			player = a_player;
 		}
 		
 		public void run() {
@@ -134,7 +136,7 @@ public class ThreadedTournament {
 					e1.printStackTrace();
 				}
 				punct = punct;
-				punct[ai1_idx][ai2_idx] += eval.evaluate(gs, 0);
+				punct[ai1_idx][ai2_idx] += eval.evaluate(gs, player);
 				punctSem.release();			
 		}
 		
@@ -167,9 +169,16 @@ public class ThreadedTournament {
 					for (int i = 0; i < iterations; i++) {
 						AI ai1 = bots1.get(ai1_idx).clone();
 						AI ai2 = bots2.get(ai2_idx).clone();
-						Runnable g = new Game(ai1_idx, ai2_idx, ai1, ai2, visualize, pgs, utt, partiallyObservable,
-								max_cycles, max_inactive_cycles, punct, punctSem, eval);
-						executor.execute(g);
+						if (i % 2 == 1) {
+							Runnable g = new Game(ai1_idx, ai2_idx, ai1, ai2, visualize, pgs, utt, partiallyObservable,
+								max_cycles, max_inactive_cycles, punct, punctSem, eval, 0);
+							executor.execute(g);
+						} else {
+							Runnable g = new Game(ai1_idx, ai2_idx, ai2, ai1, visualize, pgs, utt, partiallyObservable,
+									max_cycles, max_inactive_cycles, punct, punctSem, eval, 1);
+							executor.execute(g);
+							
+						}
 					}
 				}
 			}
