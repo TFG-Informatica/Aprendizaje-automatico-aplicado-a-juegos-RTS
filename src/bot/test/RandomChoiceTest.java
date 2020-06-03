@@ -12,6 +12,7 @@ import GNS.Droplet;
 import ai.RandomBiasedAI;
 import ai.core.AI;
 import bot.eval.Time;
+import bot.eval.TimePlusWins;
 import bot.eval.Wins;
 import bot.ia.MultiStageGeneralScript;
 import bot.scripts.GeneralScript;
@@ -43,7 +44,7 @@ public class RandomChoiceTest {
 	
 	private static UnitTypeTable utt = new UnitTypeTable(UnitTypeTable.VERSION_ORIGINAL_FINETUNED);
 	private static GameState gs; 
-	private static int MAX_CYCLES = 3000;
+	private static int MAX_CYCLES = 5000;
 	private static boolean visual = false;
 	private static List<AI> rivals = new ArrayList<AI>();
 	private static PrintStream OUT;
@@ -61,7 +62,7 @@ public class RandomChoiceTest {
 		rivals = Arrays.asList(new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
 				new EMRDeterministico(utt), new HeavyDefense(utt), new HeavyRush(utt), new LightDefense(utt),
 				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
-				new SimpleEconomyRush(utt), new WorkerDefense(utt), /*new WorkerRush(utt),*/ new WorkerRushPlusPlus(utt), new Droplet(utt));
+				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt), new Droplet(utt));
 		
 		ArrayList<AI> population = new ArrayList<AI>();
 		Random r = new Random();
@@ -88,7 +89,7 @@ public class RandomChoiceTest {
 		double[] evaluation = new double[population.size()];
 		
 		double[][] tournRes = ThreadedTournament.evaluate(population, population, Arrays.asList(gs.getPhysicalGameState()), utt, 2,
-				MAX_CYCLES, MAX_CYCLES, visual, new Wins(), System.out, -1, false, false, "traces/");
+				MAX_CYCLES, MAX_CYCLES, visual, new TimePlusWins(MAX_CYCLES), System.out, -1, false, false, "traces/");
 		
 		for (int i = 0; i < evaluation.length; ++i) {
 			evaluation[i] = 0;

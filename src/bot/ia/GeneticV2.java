@@ -251,7 +251,7 @@ public class GeneticV2 {
 		}
 		
 		double[][] tournRes = ThreadedTournament.evaluate(unknowns, unknowns, Arrays.asList(gs.getPhysicalGameState()), utt, NUM_MATCH,
-				MAX_CYCLES, MAX_CYCLES, visual, new Time(), System.out, -1, false, false, "traces/");
+				MAX_CYCLES, MAX_CYCLES, visual, new Time(MAX_CYCLES), System.out, -1, false, false, "traces/");
 		
 		for (int i = 0; i < evaluation.length; ++i) {
 			evaluation[i] = 0;
@@ -376,7 +376,7 @@ public class GeneticV2 {
 		List<AI> drop = new ArrayList<AI>(Arrays.asList(new Droplet(utt)));
 		
 		double[][] tournRes = ThreadedTournament.evaluate(bots, drop, Arrays.asList(gs.getPhysicalGameState()), utt, NUM_MATCH,
-				MAX_CYCLES, MAX_CYCLES, visual, new Time(), System.out, -1, false, false, "traces/");
+				MAX_CYCLES, MAX_CYCLES, visual, new Time(MAX_CYCLES), System.out, -1, false, false, "traces/");
 		
 		TOUT.print(tournRes[0][0]);
 		for (int i = 1; i < tournRes.length; ++i) {

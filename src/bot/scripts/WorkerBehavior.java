@@ -101,6 +101,21 @@ public class WorkerBehavior extends UnitBehavior {
                 } else {
                     gs.harvest(u, closestResource, closestBase);
                 }
+            } else {
+            	Unit closestEnemy = null;
+                closestDistance = 0;
+                for (Unit u2 : pgs.getUnits()) {
+                    if (u2.getPlayer() >= 0 && u2.getPlayer() != p.getID()) {
+                        int d = Math.abs(u2.getX() - u.getX()) + Math.abs(u2.getY() - u.getY());
+                        if (closestEnemy == null || d < closestDistance) {
+                            closestEnemy = u2;
+                            closestDistance = d;
+                        }
+                    }
+                }
+                if (closestEnemy != null) {
+                    gs.attack(u, closestEnemy);
+                }
             }
         }
 		previousBases = nbases;
@@ -183,6 +198,21 @@ public class WorkerBehavior extends UnitBehavior {
                 } else {
                     gs.harvest(u, closestResource, closestBase);
                 }
+            } else {
+            	Unit closestEnemy = null;
+                closestDistance = 0;
+                for (Unit u2 : pgs.getUnits()) {
+                    if (u2.getPlayer() >= 0 && u2.getPlayer() != p.getID()) {
+                        int d = Math.abs(u2.getX() - u.getX()) + Math.abs(u2.getY() - u.getY());
+                        if (closestEnemy == null || d < closestDistance) {
+                            closestEnemy = u2;
+                            closestDistance = d;
+                        }
+                    }
+                }
+                if (closestEnemy != null) {
+                    gs.attack(u, closestEnemy);
+                }
             }
         } else {
             Unit closestEnemy = null;
@@ -257,6 +287,21 @@ public class WorkerBehavior extends UnitBehavior {
                     	gs.harvest(u, closestResource, closestBase);
                 } else {
                     gs.harvest(u, closestResource, closestBase);
+                }
+            } else {
+            	Unit closestEnemy = null;
+                closestDistance = 0;
+                for (Unit u2 : pgs.getUnits()) {
+                    if (u2.getPlayer() >= 0 && u2.getPlayer() != p.getID()) {
+                        int d = Math.abs(u2.getX() - u.getX()) + Math.abs(u2.getY() - u.getY());
+                        if (closestEnemy == null || d < closestDistance) {
+                            closestEnemy = u2;
+                            closestDistance = d;
+                        }
+                    }
+                }
+                if (closestEnemy != null) {
+                    gs.attack(u, closestEnemy);
                 }
             }
         } else {

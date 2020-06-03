@@ -63,13 +63,18 @@ public class Fight {
 	*/
 		
 		bots = new ArrayList<AI>(Arrays.asList(new MultiStageGeneralScript(Arrays.asList(
-				new GeneralScript(utt, -1, -1, BaseBehType.ONEWORKER, BarBehType.RANGED, WorkBehType.THREEHARVAGGR,
-				LightBehType.WAIT, HeavyBehType.WAIT, RangedBehType.WAIT)))));
+				new GeneralScript(utt, -1, -1, BaseBehType.ONEWORKER, BarBehType.LIGHT, WorkBehType.HARVESTER,
+				LightBehType.WAIT, HeavyBehType.WAIT, RangedBehType.WAIT))),new MultiStageGeneralScript(Arrays.asList(
+						new GeneralScript(utt, -1, -1, BaseBehType.ONEWORKER, BarBehType.LIGHT, WorkBehType.HARVESTER,
+								LightBehType.CLOSEST, HeavyBehType.WAIT, RangedBehType.WAIT))),new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
+				new EMRDeterministico(utt), new HeavyDefense(utt), new HeavyRush(utt), new LightDefense(utt),
+				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
+				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt), new Droplet(utt)));
 		
 		try {
 			gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
 			Tournament.evaluate(bots, Arrays.asList(gs.getPhysicalGameState()), utt, 1, 3000, 3000, true, System.out, 0,
-					false, false, "traces/");
+					true, false, "traces/");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

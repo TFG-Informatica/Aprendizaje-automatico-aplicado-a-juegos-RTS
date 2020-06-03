@@ -70,7 +70,7 @@ public class Tournament {
 						boolean gameover = false;
 						do {
 							// System.gc();
-							Thread.sleep(10);
+							Thread.sleep(100);
 							PlayerAction pa1 = null, pa2 = null;
 							if (partiallyObservable) {
 								pa1 = ai1.getAction(0, new PartiallyObservableGameState(gs, 0));

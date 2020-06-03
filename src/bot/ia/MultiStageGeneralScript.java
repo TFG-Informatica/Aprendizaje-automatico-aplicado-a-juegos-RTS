@@ -13,7 +13,7 @@ import rts.PlayerAction;
 
 public class MultiStageGeneralScript extends AbstractionLayerAI {
 	
-	int MAX_CYCLES = 3000;
+	int MAX_CYCLES = 5000;
 	int stageCycles;
 	List<GeneralScript> scripts;
 

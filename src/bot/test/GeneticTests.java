@@ -43,7 +43,7 @@ public class GeneticTests {
 	private static List<AI> rivals = null;
 	private static UnitTypeTable utt = null;
 	private static GameState gs = null;
-	private static final String map = "maps/8x8/basesWorkers8x8.xml";
+	private static final String map = "maps/24x24/basesWorkers24x24.xml";
 	
 	public static void main(String args[]) throws Exception{
 		
@@ -62,26 +62,36 @@ public class GeneticTests {
 		rivals = Arrays.asList(new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
 				new EMRDeterministico(utt), new HeavyDefense(utt), new HeavyRush(utt), new LightDefense(utt),
 				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
-				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt), new Droplet(utt));
+				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt)/*, new Droplet(utt)*/);
 		
-		PrintStream OUT = new PrintStream(new FileOutputStream("data/All8x8FinalMagic.csv"));
+		PrintStream OUT = new PrintStream(new FileOutputStream("data/All24x24FinalMagic.csv"));
 		
 		OUT.println("BaseBeh,BarBeh,WorkBeh,LightBeh,HeavyBeh,RangedBeh,Fit01,Fit02,Fit03,Fit04,Fit05,"
 				+ "Fit06,Fit07,Fit08,Fit09,Fit10,Fit11,Fit12,Fit13,Fit14,Fit15,FitTot");
 		
-		double res[][] = ThreadedTournament.evaluate(allGS, rivals, Arrays.asList(gs.getPhysicalGameState()), 
-											utt, 2, 3000, 3000, false, new TimePlusWins(3000), System.out, -1, false, false, "traces/");
-		
-		for(int i = 0; i < allGS.size(); ++i) {
-			for(String s : ((GeneralScript) allGS.get(i)).getBehaviorTypes())
-				OUT.print(s + ",");
-			int fitnessTotal = 0;
-			for(int j = 0; j < rivals.size(); ++j) {
-				OUT.print(res[i][j] + ",");
-				fitnessTotal += res[i][j];
+		int i = 0;
+		while (i < allGS.size()) {
+			List<AI> someGS = new ArrayList<AI>();
+			for(int k = 0; k < 1000 && i < allGS.size(); ++k) {
+				someGS.add(allGS.get(i));
+				++i;
 			}
-			OUT.print(fitnessTotal + "\n");
+			double res[][] = ThreadedTournament.evaluate(someGS, rivals, Arrays.asList(gs.getPhysicalGameState()), 
+											utt, 2, 5000, 5000, false, new TimePlusWins(5000), System.out, -1, false, false, "traces/");
+		
+			for(int k = 0; k < someGS.size(); ++k) {
+				for(String s : ((GeneralScript) someGS.get(k)).getBehaviorTypes())
+					OUT.print(s + ",");
+				int fitnessTotal = 0;
+				for(int j = 0; j < rivals.size(); ++j) {
+					OUT.print(res[k][j] + ",");
+					fitnessTotal += res[k][j];
+				}
+				OUT.print(fitnessTotal + "\n");
+			}
+			System.out.println("Se han hecho " + i);
 		}
+		OUT.close();
 	}
 	
 }

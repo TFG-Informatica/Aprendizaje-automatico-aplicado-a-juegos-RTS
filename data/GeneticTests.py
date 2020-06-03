@@ -13,7 +13,7 @@ colors = ['#BD190E', '#C6870B', '#71AF06', '#0D8915', '#14A8D5', '#071CD7', '#6E
 sns.set_style("whitegrid")
 sns.set_palette(sns.color_palette(colors))
 
-data['FitTot'] = data['FitTot'] % 1000;
+data['FitTot'] = data['FitTot'] // 1000;
 
 for i in range(6):
     plt.figure(figsize=(10,10))    

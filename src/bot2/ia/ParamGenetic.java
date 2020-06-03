@@ -229,7 +229,7 @@ public class ParamGenetic {
 		}
 		
 		double[][] tournRes = ThreadedTournament.evaluate(unknowns, rivals, Arrays.asList(gs.getPhysicalGameState()), utt, 1,
-				MAX_CYCLES, MAX_CYCLES, visual, new Time(), System.out, -1, false, false, "traces/");
+				MAX_CYCLES, MAX_CYCLES, visual, new Time(MAX_CYCLES), System.out, -1, false, false, "traces/");
 		
 		int j = 0;
 		for (int i = 0; i < evaluation.length; ++i) {
