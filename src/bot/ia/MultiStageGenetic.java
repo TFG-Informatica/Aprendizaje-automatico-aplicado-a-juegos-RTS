@@ -80,7 +80,7 @@ public class MultiStageGenetic {
 				scripts.add(new GeneralScript(utt, baseBehType, barBehType, 
 						workBehType, lightBehType, heavyBehType, rangedBehType));
 			}
-			population.add(new MultiStageGeneralScript(scripts));
+			population.add(new MultiStageGeneralScript(MAX_CYCLES, scripts));
 		}
 	}
 	
@@ -146,8 +146,8 @@ public class MultiStageGenetic {
 					WorkBehType.valueOf(nparam2.get(2)), LightBehType.valueOf(nparam2.get(3)),
 					HeavyBehType.valueOf(nparam2.get(4)), RangedBehType.valueOf(nparam2.get(5))));
 			
-			crossPopulation.add(new MultiStageGeneralScript(scripts1));		
-			crossPopulation.add(new MultiStageGeneralScript(scripts2));	
+			crossPopulation.add(new MultiStageGeneralScript(MAX_CYCLES, scripts1));		
+			crossPopulation.add(new MultiStageGeneralScript(MAX_CYCLES, scripts2));	
 		}
 		newPopulation = crossPopulation;
 	}
@@ -176,7 +176,7 @@ public class MultiStageGenetic {
 						WorkBehType.valueOf(param.get(2)), LightBehType.valueOf(param.get(3)),
 						HeavyBehType.valueOf(param.get(4)), RangedBehType.valueOf(param.get(5))));
 			}
-			newPopulation.set(i, new MultiStageGeneralScript(scripts));
+			newPopulation.set(i, new MultiStageGeneralScript(MAX_CYCLES, scripts));
 		}
 	}
 	

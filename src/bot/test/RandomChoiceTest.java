@@ -78,7 +78,7 @@ public class RandomChoiceTest {
 				scripts.add(new GeneralScript(utt, baseBehType, barBehType, 
 						workBehType, lightBehType, heavyBehType, rangedBehType));
 			}
-			population.add(new MultiStageGeneralScript(scripts));
+			population.add(new MultiStageGeneralScript(MAX_CYCLES, scripts));
 		}
 		
 		double[] evaluation = fitness(population);

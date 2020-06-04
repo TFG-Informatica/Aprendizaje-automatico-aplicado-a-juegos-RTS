@@ -62,11 +62,12 @@ public class Fight {
 				RangedBehType.CLOSEST))));
 	*/
 		
-		bots = new ArrayList<AI>(Arrays.asList(new MultiStageGeneralScript(Arrays.asList(
+		bots = new ArrayList<AI>(Arrays.asList(new MultiStageGeneralScript(3000, Arrays.asList(
 				new GeneralScript(utt, -1, -1, BaseBehType.ONEWORKER, BarBehType.LIGHT, WorkBehType.HARVESTER,
-				LightBehType.WAIT, HeavyBehType.WAIT, RangedBehType.WAIT))),new MultiStageGeneralScript(Arrays.asList(
-						new GeneralScript(utt, -1, -1, BaseBehType.ONEWORKER, BarBehType.LIGHT, WorkBehType.HARVESTER,
-								LightBehType.CLOSEST, HeavyBehType.WAIT, RangedBehType.WAIT))),new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
+				LightBehType.WAIT, HeavyBehType.WAIT, RangedBehType.WAIT))),
+				new MultiStageGeneralScript(3000, Arrays.asList(
+				new GeneralScript(utt, -1, -1, BaseBehType.ONEWORKER, BarBehType.LIGHT, WorkBehType.HARVESTER,
+				LightBehType.CLOSEST, HeavyBehType.WAIT, RangedBehType.WAIT))),new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
 				new EMRDeterministico(utt), new HeavyDefense(utt), new HeavyRush(utt), new LightDefense(utt),
 				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
 				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt), new Droplet(utt)));

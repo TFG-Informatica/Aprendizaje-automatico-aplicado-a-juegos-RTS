@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import GNS.Droplet;
 import ai.RandomBiasedAI;
 import ai.core.AI;
 import bot.eval.Wins;
@@ -40,34 +41,36 @@ public class MultiFight {
 
 	private static Scanner IN = null;
 	private static PrintStream OUT = null;
-	private static int iterations = 1;
+	private static int iterations = 10;
 
 	public static void main(String[] args) throws Exception {
 
 		OUT = new PrintStream(new FileOutputStream("ResultadosLucha.txt"));
 		
-		UnitTypeTable utt = new UnitTypeTable();
+		UnitTypeTable utt = new UnitTypeTable(UnitTypeTable.VERSION_ORIGINAL_FINETUNED);
 		GameState gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
 		//Genetic g = new Genetic(25, 5, 5, utt, new AStarPathFinding(), gs, false);
 		//g.evolutionaryAlgorithm(30);
 
-		List<AI> bots1 = new ArrayList<AI>(Arrays.asList(new MultiStageGeneralScript(Arrays.asList(
-				new GeneralScript(utt, BaseBehType.TWOWORKER, BarBehType.RANGED, WorkBehType.HARVESTER,
-						LightBehType.WAIT, HeavyBehType.WAIT, RangedBehType.WAIT),
+		List<AI> bots1 = new ArrayList<AI>(Arrays.asList(
 				new GeneralScript(utt, BaseBehType.TWOWORKER, BarBehType.LIGHT, WorkBehType.HARVESTER,
-						LightBehType.CLOSEST, HeavyBehType.WAIT, RangedBehType.CLOSEST),
-				new GeneralScript(utt, BaseBehType.RUSHWORKER, BarBehType.LIGHT, WorkBehType.ONEHARVAGGR,
-						LightBehType.CLOSEST, HeavyBehType.CLOSBUIL, RangedBehType.CLOSEST)))));
+						LightBehType.CLOSEST, HeavyBehType.WAIT, RangedBehType.WAIT),
+				new GeneralScript(utt, BaseBehType.TWOWORKER, BarBehType.HEAVY, WorkBehType.HARVESTER,
+						LightBehType.CLOSEST, HeavyBehType.CLOSEST, RangedBehType.CLOSEST),
+				new GeneralScript(utt, BaseBehType.THREEWORKER, BarBehType.LIGHT, WorkBehType.HARVESTER,
+						LightBehType.CLOSEST, HeavyBehType.CLOSBUIL, RangedBehType.CLOSEST),
+				new GeneralScript(utt, BaseBehType.THREEWORKER, BarBehType.HEAVY, WorkBehType.HARVESTER,
+						LightBehType.CLOSEST, HeavyBehType.CLOSEST, RangedBehType.WAIT)));
 		
 		/*for (int i = 0; i < 10; ++i) {
 			IN = new Scanner(new File("serial/Bot" + i + ".txt"));
 			bots1.add(MultiStageGeneralScriptIO.load(IN, utt));
 		}*/
 		
-		List<AI> bots2 = Arrays.asList(new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
+		List<AI> bots2 = Arrays.asList(/*new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
 				new EMRDeterministico(utt), new HeavyDefense(utt), new HeavyRush(utt), new LightDefense(utt),
 				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
-				new SimpleEconomyRush(utt), new WorkerDefense(utt), /*new WorkerRush(utt),*/ new WorkerRushPlusPlus(utt));
+				new SimpleEconomyRush(utt), new WorkerDefense(utt), /*new WorkerRush(utt), new WorkerRushPlusPlus(utt)*/new Droplet(utt));
 
 		/*
 		 * OUT.println("Genetico terminado. Resultados:");
@@ -78,7 +81,7 @@ public class MultiFight {
 		 */
 
 		double[][] res = ThreadedTournament.evaluate(bots1, bots2, Arrays.asList(gs.getPhysicalGameState()), utt, iterations,
-				3000, 3000, false, new Wins(), OUT, -1, true, false, "traces/");
+				5000, 5000, false, new Wins(), OUT, -1, true, false, "traces/");
 		int[] resultado = new int[res.length];
 		for (int i = 0; i < resultado.length; ++i) {
 			resultado[i] = 0;

@@ -52,8 +52,8 @@ public class GeneticV2 {
 	private final int TOURNSIZE = 1;
 	private final double MUT_CHANCE = 0.3;
 	private final int MUT_TIMES = 3;
-	private final int MAX_CYCLES = 3000;
-	private final int REQ_DIFF = 12;
+	private final int MAX_CYCLES = 6000;
+	private final int REQ_DIFF = 2;
 	private final int NUM_MATCH = 2;
 	
 	
@@ -106,7 +106,7 @@ public class GeneticV2 {
 				scripts.add(new GeneralScript(utt, baseBehType, barBehType, 
 						workBehType, lightBehType, heavyBehType, rangedBehType));
 			}
-			MultiStageGeneralScript newElem = new MultiStageGeneralScript(scripts);
+			MultiStageGeneralScript newElem = new MultiStageGeneralScript(MAX_CYCLES, scripts);
 			if (checkDiff(newElem, population) >= REQ_DIFF)
 				population.add(newElem);
 		}
@@ -177,8 +177,8 @@ public class GeneticV2 {
 					WorkBehType.valueOf(nparam2.get(2)), LightBehType.valueOf(nparam2.get(3)),
 					HeavyBehType.valueOf(nparam2.get(4)), RangedBehType.valueOf(nparam2.get(5))));
 			
-			children.add(new MultiStageGeneralScript(scripts1));		
-			children.add(new MultiStageGeneralScript(scripts2));	
+			children.add(new MultiStageGeneralScript(MAX_CYCLES, scripts1));		
+			children.add(new MultiStageGeneralScript(MAX_CYCLES, scripts2));	
 		}
 	}
 	
@@ -209,7 +209,7 @@ public class GeneticV2 {
 						WorkBehType.valueOf(param.get(2)), LightBehType.valueOf(param.get(3)),
 						HeavyBehType.valueOf(param.get(4)), RangedBehType.valueOf(param.get(5))));
 			}
-			population.set(i, new MultiStageGeneralScript(scripts));
+			population.set(i, new MultiStageGeneralScript(MAX_CYCLES, scripts));
 		}
 	}
 	

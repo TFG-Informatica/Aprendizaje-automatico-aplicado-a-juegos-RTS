@@ -82,7 +82,7 @@ public class GeneticTests {
 			for(int k = 0; k < someGS.size(); ++k) {
 				for(String s : ((GeneralScript) someGS.get(k)).getBehaviorTypes())
 					OUT.print(s + ",");
-				int fitnessTotal = 0;
+				double fitnessTotal = 0;
 				for(int j = 0; j < rivals.size(); ++j) {
 					OUT.print(res[k][j] + ",");
 					fitnessTotal += res[k][j];

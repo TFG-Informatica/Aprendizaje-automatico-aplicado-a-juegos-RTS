@@ -1,2 +1,5 @@
 Competición final terminada. Resultados:
-Bot0 ha ganado 12 de 14 partidas.
+Bot0 ha ganado 0 de 10 partidas.
+Bot1 ha ganado 10 de 10 partidas.
+Bot2 ha ganado 10 de 10 partidas.
+Bot3 ha ganado 8 de 10 partidas.

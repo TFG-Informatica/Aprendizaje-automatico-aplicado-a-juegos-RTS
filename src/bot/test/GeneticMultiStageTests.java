@@ -91,7 +91,7 @@ public class GeneticMultiStageTests {
 		
 		for (int i = 0; i < bestGS.get(0).size();++i)
 			for (AI z : allGS) {
-				us.add(new MultiStageGeneralScript(Arrays.asList((GeneralScript)bestGS.get(0).get(i), 
+				us.add(new MultiStageGeneralScript(3000, Arrays.asList((GeneralScript)bestGS.get(0).get(i), 
 						(GeneralScript)bestGS.get(1).get(i), 
 						(GeneralScript)z)));
 			}

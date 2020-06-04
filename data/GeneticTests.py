@@ -7,13 +7,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-data = pd.read_csv("All8x8FinalMagic.csv")
+data = pd.read_csv("All24x24FinalMagic.csv")
 
 colors = ['#BD190E', '#C6870B', '#71AF06', '#0D8915', '#14A8D5', '#071CD7', '#6E1CDA', '#CD16B4']
 sns.set_style("whitegrid")
 sns.set_palette(sns.color_palette(colors))
 
-data['FitTot'] = data['FitTot'] // 1000;
+data['FitTot'] = data['Fit15'] // 1000;
 
 for i in range(6):
     plt.figure(figsize=(10,10))    
@@ -35,5 +35,5 @@ for i in range(6):
             line.set_mfc(colors[j])
             line.set_mec(colors[j])
     plt.title("Fitness obtenido según la variable " + data.columns.values[i], x=0.5, y=1.025)
-    plt.savefig(data.columns.values[i] + "All8x8FinalMagic.png")
+    plt.savefig(data.columns.values[i] + "All24x24FinalMagic.png")
     

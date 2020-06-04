@@ -13,21 +13,23 @@ import rts.PlayerAction;
 
 public class MultiStageGeneralScript extends AbstractionLayerAI {
 	
-	int MAX_CYCLES = 5000;
+	int max_cycles;
 	int stageCycles;
 	List<GeneralScript> scripts;
 
-	public MultiStageGeneralScript(List<GeneralScript> a_scripts) {
+	public MultiStageGeneralScript(int a_max_cycles, List<GeneralScript> a_scripts) {
 		super(new AStarPathFinding());
+		max_cycles = a_max_cycles;
 		scripts = a_scripts;
-		stageCycles = MAX_CYCLES / scripts.size() + 1; 
+		stageCycles = max_cycles / scripts.size() + 1; 
 	}
 
-	public MultiStageGeneralScript(int timebudget, int cyclesbudget, 
+	public MultiStageGeneralScript(int timebudget, int cyclesbudget, int a_max_cycles, 
 		List<GeneralScript> a_scripts) {
 		super(new AStarPathFinding(), timebudget, cyclesbudget);
+		max_cycles = a_max_cycles;
 		scripts = a_scripts;
-		stageCycles = MAX_CYCLES / scripts.size() + 1;
+		stageCycles = max_cycles / scripts.size() + 1;
 	}
 	
 	public List<GeneralScript> getScripts() {
@@ -47,8 +49,7 @@ public class MultiStageGeneralScript extends AbstractionLayerAI {
 		List<GeneralScript> scriptsCopy = new ArrayList<GeneralScript>();
 		for (GeneralScript gs : scripts) 
 			scriptsCopy.add(gs.clone());
-		return new MultiStageGeneralScript(getTimeBudget(), 
-											getIterationsBudget(), scriptsCopy);
+		return new MultiStageGeneralScript(getTimeBudget(), getIterationsBudget(),  max_cycles, scriptsCopy);
 	}
 	
 	@Override

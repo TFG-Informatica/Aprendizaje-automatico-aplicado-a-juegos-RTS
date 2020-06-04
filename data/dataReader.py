@@ -4,7 +4,7 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-with open('dropletVSself.csv', 'r') as csvfile:
+with open('exp2.csv', 'r') as csvfile:
     so = csv.reader(csvfile, delimiter=',')
     data = []
     for row in so:

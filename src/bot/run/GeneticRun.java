@@ -24,8 +24,8 @@ public class GeneticRun {
 		UnitTypeTable utt = new UnitTypeTable(UnitTypeTable.VERSION_ORIGINAL_FINETUNED);
 		GameState gs = null;
 		List<AI> result = null;
-		gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
-		GeneticV2 g = new GeneticV2(6, 6, 5, utt, gs, false);
+		gs = new GameState(PhysicalGameState.load("maps/basesWorkers32x32A.xml", utt), utt);
+		GeneticV2 g = new GeneticV2(6, 6, 1, utt, gs, false);
 		g.evolutionaryAlgorithm(10);
 		result = g.getBestPopulation();
   
