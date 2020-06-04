@@ -98,4 +98,8 @@ public class MultiStageGeneralScript extends AbstractionLayerAI {
 			return false;
 		return true;
 	}
+
+	public int get_cycles() {
+		return max_cycles;
+	}
 }
