@@ -5,9 +5,8 @@ import java.io.PrintStream;
 import java.util.List;
 
 import ai.core.AI;
-import bot.ia.GeneticV2;
+import bot.ia.Genetic;
 import bot.ia.MultiStageGeneralScript;
-import bot.ia.MultiStageGenetic;
 import bot.io.MultiStageGeneralScriptIO;
 import rts.GameState;
 import rts.PhysicalGameState;
@@ -24,9 +23,9 @@ public class GeneticRun {
 		UnitTypeTable utt = new UnitTypeTable(UnitTypeTable.VERSION_ORIGINAL_FINETUNED);
 		GameState gs = null;
 		List<AI> result = null;
-		gs = new GameState(PhysicalGameState.load("maps/basesWorkers32x32A.xml", utt), utt);
-		GeneticV2 g = new GeneticV2(6, 6, 1, utt, gs, false);
-		g.evolutionaryAlgorithm(10);
+		gs = new GameState(PhysicalGameState.load("maps/GardenOfWar64x64.xml", utt), utt);
+		Genetic g = new Genetic(10, 10, 10, utt, gs, false);
+		g.evolutionaryAlgorithm(20);
 		result = g.getBestPopulation();
   
 		OUT.println("Resultado:");
@@ -34,7 +33,7 @@ public class GeneticRun {
 		for (int i = 0; i < result.size(); ++i) {
 			System.out.println(((MultiStageGeneralScript)result.get(i)).toString());
 			OUT.println(result.get(i).toString());
-			PrintStream ser = new PrintStream(new FileOutputStream("serial/Bot" + i + ".txt"));
+			PrintStream ser = new PrintStream(new FileOutputStream("serial/SelfBot64x64" + i + ".txt"));
 			MultiStageGeneralScriptIO.store(ser, (MultiStageGeneralScript) result.get(i));
 			ser.close();
 		}

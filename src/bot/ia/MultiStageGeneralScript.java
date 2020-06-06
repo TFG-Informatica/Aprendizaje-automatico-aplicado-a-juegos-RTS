@@ -7,7 +7,6 @@ import ai.abstraction.AbstractionLayerAI;
 import ai.abstraction.pathfinding.AStarPathFinding;
 import ai.core.AI;
 import ai.core.ParameterSpecification;
-import bot.scripts.GeneralScript;
 import rts.GameState;
 import rts.PlayerAction;
 

@@ -12,16 +12,17 @@ import ai.RandomBiasedAI;
 import ai.abstraction.partialobservability.POLightRush;
 import ai.core.AI;
 import ai.mcts.naivemcts.NaiveMCTS;
+import bot.behavior.BarrackBehavior.BarBehType;
+import bot.behavior.BaseBehavior.BaseBehType;
+import bot.behavior.HeavyBehavior.HeavyBehType;
+import bot.behavior.LightBehavior.LightBehType;
+import bot.behavior.RangedBehavior.RangedBehType;
+import bot.behavior.WorkerBehavior.WorkBehType;
+import bot.eval.Time;
+import bot.ia.GeneralScript;
 import bot.ia.MultiStageGeneralScript;
 import bot.io.MultiStageGeneralScriptIO;
-import bot.scripts.GeneralScript;
-import bot.scripts.BarrackBehavior.BarBehType;
-import bot.scripts.BaseBehavior.BaseBehType;
-import bot.scripts.HeavyBehavior.HeavyBehType;
-import bot.scripts.LightBehavior.LightBehType;
-import bot.scripts.RangedBehavior.RangedBehType;
-import bot.scripts.WorkerBehavior.WorkBehType;
-import bot.tournaments.Tournament;
+import bot.tournaments.ThreadedTournament;
 import mrtsFixed.bots.EMRDeterministico;
 import mrtsFixed.bots.EconomyMilitaryRush;
 import mrtsFixed.bots.EconomyRush;
@@ -43,8 +44,8 @@ import rts.units.UnitTypeTable;
 public class Fight {
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		Scanner bot1file = new Scanner(new File("serial/Bot0.txt"));
-		Scanner bot2file = new Scanner(new File("serial/Bot1.txt"));
+		Scanner bot1file = new Scanner(new File("serial/SelfBot8x80.txt"));
+		Scanner bot2file = null;
 
 		UnitTypeTable utt = new UnitTypeTable(UnitTypeTable.VERSION_ORIGINAL_FINETUNED);
 		GameState gs = null;
@@ -62,7 +63,8 @@ public class Fight {
 				RangedBehType.CLOSEST))));
 	*/
 		
-		bots = new ArrayList<AI>(Arrays.asList(new MultiStageGeneralScript(3000, Arrays.asList(
+		bots.add(MultiStageGeneralScriptIO.load(bot1file, utt)); bots.add(new LightRush(utt));
+				/*new ArrayList<AI>(Arrays.asList(new MultiStageGeneralScript(3000, Arrays.asList(
 				new GeneralScript(utt, -1, -1, BaseBehType.ONEWORKER, BarBehType.LIGHT, WorkBehType.HARVESTER,
 				LightBehType.WAIT, HeavyBehType.WAIT, RangedBehType.WAIT))),
 				new MultiStageGeneralScript(3000, Arrays.asList(
@@ -70,11 +72,11 @@ public class Fight {
 				LightBehType.CLOSEST, HeavyBehType.WAIT, RangedBehType.WAIT))),new EconomyMilitaryRush(utt), new EconomyRush(utt), new EconomyRushBurster(utt),
 				new EMRDeterministico(utt), new HeavyDefense(utt), new HeavyRush(utt), new LightDefense(utt),
 				new LightRush(utt), new RandomBiasedAI(utt), new RangedDefense(utt), new RangedRush(utt),
-				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt), new Droplet(utt)));
+				new SimpleEconomyRush(utt), new WorkerDefense(utt), new WorkerRushPlusPlus(utt), new Droplet(utt)));*/
 		
 		try {
-			gs = new GameState(PhysicalGameState.load("maps/24x24/basesWorkers24x24.xml", utt), utt);
-			Tournament.evaluate(bots, Arrays.asList(gs.getPhysicalGameState()), utt, 1, 3000, 3000, true, System.out, 0,
+			gs = new GameState(PhysicalGameState.load("maps/8x8/basesWorkers8x8.xml", utt), utt);
+			ThreadedTournament.evaluate(bots, bots, Arrays.asList(gs.getPhysicalGameState()), utt, 1, 3000, 3000, true, new Time(3000), System.out, 0,
 					true, false, "traces/");
 		} catch (Exception e) {
 			e.printStackTrace();

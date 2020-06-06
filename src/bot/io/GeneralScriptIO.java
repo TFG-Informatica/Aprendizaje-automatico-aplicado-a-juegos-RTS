@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import bot.scripts.GeneralScript;
-import bot.scripts.BarrackBehavior.BarBehType;
-import bot.scripts.BaseBehavior.BaseBehType;
-import bot.scripts.HeavyBehavior.HeavyBehType;
-import bot.scripts.LightBehavior.LightBehType;
-import bot.scripts.RangedBehavior.RangedBehType;
-import bot.scripts.WorkerBehavior.WorkBehType;
+import bot.behavior.BarrackBehavior.BarBehType;
+import bot.behavior.BaseBehavior.BaseBehType;
+import bot.behavior.HeavyBehavior.HeavyBehType;
+import bot.behavior.LightBehavior.LightBehType;
+import bot.behavior.RangedBehavior.RangedBehType;
+import bot.behavior.WorkerBehavior.WorkBehType;
+import bot.ia.GeneralScript;
 import rts.units.UnitTypeTable;
 
 public class GeneralScriptIO {

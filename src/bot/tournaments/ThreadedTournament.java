@@ -73,6 +73,13 @@ public class ThreadedTournament {
 				if (visualize)
 					w = PhysicalGameStatePanel.newVisualizer(gs, 600, 600, partiallyObservable);
 
+				try {
+					ai1.preGameAnalysis(gs,0);
+					ai2.preGameAnalysis(gs,0);
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				
 				boolean gameover = false;
 				do {
 					if (visualize) {

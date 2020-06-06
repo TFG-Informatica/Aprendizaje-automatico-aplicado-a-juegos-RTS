@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import bot.ia.GeneralScript;
 import bot.ia.MultiStageGeneralScript;
-import bot.scripts.GeneralScript;
 import rts.units.UnitTypeTable;
 
 public class MultiStageGeneralScriptIO {

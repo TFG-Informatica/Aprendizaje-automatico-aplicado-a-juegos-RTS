@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/microrts"/>
+	<classpathentry kind="src" path="/Droplet"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/microrts"/>
 	<classpathentry kind="lib" path="/microrts/lib/jdom.jar"/>
+	<classpathentry kind="lib" path="/microrts/lib/minimal-json-0.9.4.jar"/>
 	<classpathentry kind="src" path="/TiamatBot"/>
-	<classpathentry kind="src" path="/Droplet"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
