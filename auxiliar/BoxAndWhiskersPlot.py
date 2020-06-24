@@ -20,11 +20,20 @@ data['FitTot'] = data['Fit15'] // 1000;
 for i in range(6):
     plt.figure(figsize=(10,10))    
     if (data.columns.values[i] == 'LightBeh'):
-        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data[data.BarBeh=='LIGHT'], width=.3, linewidth=3)
+        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data[data.BarBeh=='LIGHT'][(data.WorkBeh=='HARVESTER') 
+                                                 | (data.WorkBeh=='ONEHARVAGGR') 
+                                                 | (data.WorkBeh=='TWOHARVAGGR') 
+                                                 | (data.WorkBeh=='THREEHARVAGGR')], width=.3, linewidth=3)
     elif (data.columns.values[i] == 'HeavyBeh'):
-        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data[data.BarBeh=='HEAVY'], width=.3, linewidth=3)
+        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data[data.BarBeh=='HEAVY'][(data.WorkBeh=='HARVESTER') 
+                                                 | (data.WorkBeh=='ONEHARVAGGR') 
+                                                 | (data.WorkBeh=='TWOHARVAGGR') 
+                                                 | (data.WorkBeh=='THREEHARVAGGR')], width=.3, linewidth=3)
     elif (data.columns.values[i] == 'RangedBeh'):
-        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data[data.BarBeh=='RANGED'], width=.3, linewidth=3)
+        ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data[data.BarBeh=='RANGED'][(data.WorkBeh=='HARVESTER') 
+                                                 | (data.WorkBeh=='ONEHARVAGGR') 
+                                                 | (data.WorkBeh=='TWOHARVAGGR') 
+                                                 | (data.WorkBeh=='THREEHARVAGGR')], width=.3, linewidth=3)
     else:
         ax = sns.boxplot(x=data.columns.values[i], y="FitTot", data=data, width=.3, linewidth=3)
     for j,patch in enumerate(ax.artists):
