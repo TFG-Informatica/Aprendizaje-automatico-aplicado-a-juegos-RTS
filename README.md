@@ -1,6 +1,8 @@
 # Aprendizaje automatico aplicado a juegos RTS
 
-Este proyecto consiste en el desarrollo de un bot capaz de jugar al juego de estrategia en tiempo real simplificado [microRTS](https://github.com/santiontanon/microrts). 
+Este proyecto consiste en el desarrollo de un bot capaz de jugar al juego de estrategia en tiempo real simplificado [microRTS](https://github.com/santiontanon/microrts).
+
+Los dos bots que se han desarrollado combinan el uso de comportamientos precodificados para cada tipo de unidad del juego con un algoritmo genético para encontrar la combinación de estos comportamientos más adecuada para el tablero sobre el que se va a jugar.
 
 ## Autoría
 
@@ -10,7 +12,7 @@ Forma parte de su Trabajo de Fin de Grado en Ingeniería Informática, dirigido 
 
 ## Contenido
 
-El proyecto incluye el código de los bots implementados, escrito en Java:
+El proyecto incluye el código de los dos bots implementados, escrito en Java:
 
  - _SingleStrategy_ es un bot sencillo que juega a microRTS empleando una estrategia fija durante toda la partida. Dicha estrategia está construida a partir de comportamientos básicos precodificados para cada tipo de unidad del juego.
  - _MultiStrategy_ es un bot más complejo desarrollado a partir de SingleStrategy. En lugar de tener una estrategia fija, puede cambiar a medida que avanza la partida. El número de estrategias que se utilizan en cada partida se puede configurar previamente. 
