@@ -30,7 +30,7 @@ Una vez hecho esto, se debe añadir al _build path_ ambos proyectos y la librer�
 
 ## Detalles del proyecto
 
-La descripción detallada de todo el trabajo, los dos bots desarrollados y los resultados obtenidos se puede encontrar en la [memoria](https://github.com/TFG-Informatica/Aprendizaje-automatico-aplicado-a-juegos-RTS/blob/master/Aprendizaje%20autom%C3%A1tico%20aplicado%20a%20juegos%20de%20estrategia%20en%20tiempo%20real%20un%20enfoque%20gen%C3%A9tico.pdf) del proyecto.
+La descripción detallada de todo el trabajo, los dos bots desarrollados y los resultados obtenidos se puede encontrar en la [memoria](https://github.com/TFG-Informatica/Aprendizaje-automatico-aplicado-a-juegos-RTS/blob/master/Memoria%20del%20proyecto.pdf) del proyecto.
 
 ## Licencia
 
